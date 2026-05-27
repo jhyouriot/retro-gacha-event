@@ -140,12 +140,51 @@
       word-break: keep-all;
     }
     .item-card .qty {
-      display: inline-block;
+      display: none;
       justify-self: center;
       padding: 3px 8px;
       background: var(--red);
       color: #fff;
       font-size: 12px;
+    }
+    body.admin .item-card .qty { display: inline-block; }
+
+    .admin-stats {
+      display: none;
+      position: relative;
+      z-index: 2;
+      margin: 0 0 18px;
+      padding: 16px;
+      border: 3px solid var(--white);
+      background: #151515;
+      box-shadow: 8px 8px 0 var(--red-dark);
+      font-family: 'Pretendard', sans-serif;
+    }
+    body.admin .admin-stats { display: block; }
+    .admin-stats h3 {
+      margin: 0 0 10px;
+      font-family: Impact, 'Arial Black', sans-serif;
+      font-size: 26px;
+      letter-spacing: 1px;
+      color: var(--white);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+    }
+    .stat-card {
+      padding: 12px;
+      background: #fff;
+      color: #111;
+      border-left: 8px solid var(--red);
+      font-weight: 900;
+    }
+    .stat-card span {
+      display: block;
+      margin-top: 4px;
+      color: var(--red);
+      font-size: 26px;
     }
 
     .board-wrap {
@@ -199,9 +238,7 @@
       background: #111;
       cursor: default;
     }
-    .cell.opened::before {
-      display: none;
-    }
+    .cell.opened::before { display: none; }
     .cell.opened::after {
       content: '';
       position: absolute;
@@ -333,6 +370,16 @@
       <div class="item-list" id="itemList"></div>
     </section>
 
+    <!-- 관리자 전용 사용 현황 영역 -->
+    <section class="admin-stats admin-only">
+      <h3>ADMIN STATUS</h3>
+      <div class="stats-grid">
+        <div class="stat-card">당일 총 사용 수량<span id="todayUsedCount">0</span></div>
+        <div class="stat-card">전체 누적 사용 수량<span id="totalUsedCount">0</span></div>
+        <div class="stat-card">남은 총 수량<span id="totalRemainingCount">500</span></div>
+      </div>
+    </section>
+
     <section class="board-wrap" aria-label="랜덤 뽑기판">
       <div class="stamp-row" id="stampRow"></div>
       <div class="draw-grid" id="drawGrid"></div>
@@ -363,56 +410,36 @@
     const resultPopup = document.getElementById('resultPopup');
     const resultImage = document.getElementById('resultImage');
     const resultName = document.getElementById('resultName');
+    const todayUsedCount = document.getElementById('todayUsedCount');
+    const totalUsedCount = document.getElementById('totalUsedCount');
+    const totalRemainingCount = document.getElementById('totalRemainingCount');
 
-    const STORAGE_KEY = 'riotStyleLuckyDrawBoard_v2';
+    const STORAGE_KEY = 'riotStyleLuckyDrawBoard_v3';
     const ADMIN_PASSWORD = '1234'; // 실제 운영 시 원하는 비밀번호로 변경
     const cols = 25;
     const rows = 20;
     const totalCount = cols * rows; // 500개
 
-    // 1. 여기에서 아이템별 수량과 제품 사진을 미리 지정하세요.
     // quantity의 합계는 반드시 500이 되어야 합니다.
     // image는 실제 GitHub에 올린 이미지 경로로 교체하면 됩니다. 예: './images/item01.png'
     const itemConfig = [
-      {
-        id: 'item01',
-        name: '리그 오브 레전드 한정 컬렉터블',
-        quantity: 20,
-        image: 'https://placehold.co/400x300/ffffff/d81920?text=ITEM+01'
-      },
-      {
-        id: 'item02',
-        name: '우르프 뒤집개 세트',
-        quantity: 40,
-        image: 'https://placehold.co/400x300/ffffff/d81920?text=ITEM+02'
-      },
-      {
-        id: 'item03',
-        name: '솔라리 비치타월',
-        quantity: 60,
-        image: 'https://placehold.co/400x300/ffffff/d81920?text=ITEM+03'
-      },
-      {
-        id: 'item04',
-        name: 'TFT 래빗 미니 피규어',
-        quantity: 80,
-        image: 'https://placehold.co/400x300/ffffff/d81920?text=ITEM+04'
-      },
-      {
-        id: 'item05',
-        name: '포로 미니 인형',
-        quantity: 120,
-        image: 'https://placehold.co/400x300/ffffff/d81920?text=ITEM+05'
-      },
-      {
-        id: 'item06',
-        name: '티모 아크릴 키링',
-        quantity: 180,
-        image: 'https://placehold.co/400x300/ffffff/d81920?text=ITEM+06'
-      }
+      { id: 'item01', name: '리그 오브 레전드 한정 컬렉터블', quantity: 20, image: 'https://placehold.co/400x300/ffffff/d81920?text=ITEM+01' },
+      { id: 'item02', name: '우르프 뒤집개 세트', quantity: 40, image: 'https://placehold.co/400x300/ffffff/d81920?text=ITEM+02' },
+      { id: 'item03', name: '솔라리 비치타월', quantity: 60, image: 'https://placehold.co/400x300/ffffff/d81920?text=ITEM+03' },
+      { id: 'item04', name: 'TFT 래빗 미니 피규어', quantity: 80, image: 'https://placehold.co/400x300/ffffff/d81920?text=ITEM+04' },
+      { id: 'item05', name: '포로 미니 인형', quantity: 120, image: 'https://placehold.co/400x300/ffffff/d81920?text=ITEM+05' },
+      { id: 'item06', name: '티모 아크릴 키링', quantity: 180, image: 'https://placehold.co/400x300/ffffff/d81920?text=ITEM+06' }
     ];
 
     let boardData = [];
+
+    function getTodayKey() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const date = String(now.getDate()).padStart(2, '0');
+      return `${year}-${month}-${date}`;
+    }
 
     function validateItemQuantity() {
       const sum = itemConfig.reduce((acc, item) => acc + item.quantity, 0);
@@ -434,10 +461,19 @@
       const pool = [];
       itemConfig.forEach(item => {
         for (let i = 0; i < item.quantity; i++) {
-          pool.push({ itemId: item.id, opened: false });
+          pool.push({ itemId: item.id, opened: false, openedAt: null, openedDate: null });
         }
       });
       return shuffle(pool);
+    }
+
+    function normalizeBoardData() {
+      boardData = boardData.map(cell => ({
+        itemId: cell.itemId,
+        opened: Boolean(cell.opened),
+        openedAt: cell.openedAt || null,
+        openedDate: cell.openedDate || null
+      }));
     }
 
     function saveBoardData() {
@@ -449,7 +485,11 @@
       if (saved) {
         try {
           boardData = JSON.parse(saved);
-          if (boardData.length === totalCount) return;
+          if (boardData.length === totalCount) {
+            normalizeBoardData();
+            saveBoardData();
+            return;
+          }
         } catch (e) {}
       }
       boardData = createNewBoardData();
@@ -460,16 +500,33 @@
       return itemConfig.find(item => item.id === id);
     }
 
+    function getTodayUsedTotal() {
+      const today = getTodayKey();
+      return boardData.filter(cell => cell.opened && cell.openedDate === today).length;
+    }
+
+    function getTotalUsed() {
+      return boardData.filter(cell => cell.opened).length;
+    }
+
+    function renderAdminStats() {
+      const used = getTotalUsed();
+      todayUsedCount.textContent = getTodayUsedTotal();
+      totalUsedCount.textContent = used;
+      totalRemainingCount.textContent = totalCount - used;
+    }
+
     function renderItemList() {
       itemList.innerHTML = '';
       itemConfig.forEach(item => {
-        const remaining = boardData.filter(cell => cell.itemId === item.id && !cell.opened).length;
+        const used = boardData.filter(cell => cell.itemId === item.id && cell.opened).length;
+        const remaining = item.quantity - used;
         const card = document.createElement('article');
         card.className = 'item-card';
         card.innerHTML = `
           <img src="${item.image}" alt="${item.name}" />
           <div class="name">${item.name}</div>
-          <div class="qty">남은 수량 ${remaining} / ${item.quantity}</div>
+          <div class="qty">사용 ${used} / 남은 ${remaining} / 총 ${item.quantity}</div>
         `;
         itemList.appendChild(card);
       });
@@ -495,11 +552,14 @@
         drawGrid.appendChild(cell);
       });
       renderItemList();
+      renderAdminStats();
     }
 
     function openCell(index) {
       if (boardData[index].opened) return;
       boardData[index].opened = true;
+      boardData[index].openedAt = new Date().toISOString();
+      boardData[index].openedDate = getTodayKey();
       saveBoardData();
 
       const item = getItemById(boardData[index].itemId);
@@ -522,7 +582,8 @@
       const password = document.getElementById('adminPassword').value;
       if (password === ADMIN_PASSWORD) {
         document.body.classList.add('admin');
-        notice.textContent = '관리자 모드입니다. 초기화 버튼을 사용할 수 있습니다.';
+        renderBoard();
+        notice.textContent = '관리자 모드입니다. 제품별 사용/남은 수량과 당일 총 사용 수량을 확인할 수 있습니다.';
       } else {
         alert('비밀번호가 올바르지 않습니다.');
       }

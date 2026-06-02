@@ -183,6 +183,7 @@
     }
 
     .board-wrap {
+      margin-top: 26px;
       padding: 16px;
       background: #090909;
       border: 4px solid #fff;
@@ -194,7 +195,7 @@
       justify-content: space-between;
       align-items: center;
       gap: 12px;
-      margin-bottom: 14px;
+      margin-bottom: 10px;
       font-family: Pretendard, sans-serif;
       font-weight: 900;
     }
@@ -211,20 +212,16 @@
     }
 
     .board-guide {
-      margin: -4px 0 14px;
+      margin: 0 0 14px;
       font-family: Pretendard, sans-serif;
       font-size: 14px;
       font-weight: 800;
       color: rgba(255,255,255,.82);
     }
 
-    .egg-select-area {
-      margin-top: 26px;
-    }
-
     .draw-grid {
       display: grid;
-      grid-template-columns: repeat(25, 1fr);
+      grid-template-columns: repeat(25, minmax(0, 1fr));
       gap: 6px;
     }
 
@@ -241,6 +238,7 @@
       cursor: pointer;
       box-shadow: inset -3px -4px 0 rgba(0,0,0,.24), 0 3px 0 #4c070a;
       overflow: hidden;
+      padding: 0;
     }
 
     .cell::before {
@@ -291,7 +289,7 @@
       font-family: Pretendard, sans-serif;
     }
 
-    input, button, select {
+    input, button {
       border: 0;
       padding: 12px 16px;
       font-family: Pretendard, sans-serif;
@@ -444,7 +442,7 @@
     <!-- 상단 중앙 PNG 이미지 / 로고 / 메인 제목 영역 -->
     <section class="top-visual">
       <div class="main-logo-image">
-        <!-- 아래 이미지 경로를 원하는 PNG로 교체하세요. 예: ./images/main-logo.png -->
+        <!-- 아래 주석을 해제하고 이미지 경로를 원하는 PNG로 교체하세요. -->
         <!-- <img src="./images/main-logo.png" alt="LUCKY DRAW LOGO"> -->
         PNG LOGO / MAIN TITLE AREA
       </div>
@@ -467,7 +465,7 @@
       </div>
     </section>
 
-    <!-- 하단 선택 가능한 알 영역 / 1번 ~ 500번 -->
+    <!-- 하단 고객 선택 가능 알 영역 / 1번 ~ 500번 -->
     <section class="board-wrap egg-select-area">
       <div class="board-header">
         <strong>LUCKY BOARD</strong>
@@ -521,25 +519,30 @@
     const publicTodayRemaining = document.getElementById('publicTodayRemaining');
     const dailySettingGrid = document.getElementById('dailySettingGrid');
 
-    const STORAGE_KEY = 'riotLuckyDrawBoard_500_v4';
-    const DAILY_LIMIT_KEY = 'riotLuckyDrawDailyLimits_v4';
+    const STORAGE_KEY = 'riotLuckyDrawBoard_500_v5';
+    const DAILY_LIMIT_KEY = 'riotLuckyDrawDailyLimits_v5';
     const ADMIN_PASSWORD = '1234';
-
     const totalCount = 500;
 
+    /*
+      stock: 전체 보유 수량
+      defaultDailyLimit: 하루 뽑기판에 배치할 기본 수량
+      아래 defaultDailyLimit 합계는 500개입니다.
+      관리자가 로그인 후 일일 수량을 변경할 수 있습니다.
+    */
     const itemConfig = [
-      { id: 'item01', name: '10주년 기념 LP 음반', defaultDailyLimit: 5, image: './images/item01.png' },
-      { id: 'item02', name: '2025 First Stand 배지', defaultDailyLimit: 15, image: './images/item02.png' },
-      { id: 'item03', name: '아케인 XL 마우스패드', defaultDailyLimit: 15, image: './images/item03.png' },
-      { id: 'item04', name: 'Worlds 2023 Premium Pen Monami Figure Set', defaultDailyLimit: 15, image: './images/item04.png' },
-      { id: 'item05', name: '2023 Worlds 스위스 현장 반팔티 - M', defaultDailyLimit: 25, image: './images/item05.png' },
-      { id: 'item06', name: '2023 Worlds 준결승 반팔티 - M', defaultDailyLimit: 25, image: './images/item06.png' },
-      { id: 'item07', name: 'Ward Squeeze', defaultDailyLimit: 50, image: './images/item07.png' },
-      { id: 'item08', name: "Poppy's Hammer Squeeze", defaultDailyLimit: 50, image: './images/item08.png' },
-      { id: 'item09', name: "Thresh's lantern Squeeze", defaultDailyLimit: 50, image: './images/item09.png' },
-      { id: 'item10', name: '폼볼-그라가스술통', defaultDailyLimit: 50, image: './images/item10.png' },
-      { id: 'item11', name: "Maokai's Sapling Foam Ball", defaultDailyLimit: 100, image: './images/item11.png' },
-      { id: 'item12', name: '아케인 시즌 2 포스터', defaultDailyLimit: 100, image: './images/item12.png' }
+      { id: 'item01', name: '10주년 기념 LP 음반', stock: 10, defaultDailyLimit: 5, image: './images/item01.png' },
+      { id: 'item02', name: '2025 First Stand 배지', stock: 30, defaultDailyLimit: 15, image: './images/item02.png' },
+      { id: 'item03', name: '아케인 XL 마우스패드', stock: 30, defaultDailyLimit: 15, image: './images/item03.png' },
+      { id: 'item04', name: 'Worlds 2023 Premium Pen Monami Figure Set', stock: 30, defaultDailyLimit: 15, image: './images/item04.png' },
+      { id: 'item05', name: '2023 Worlds 스위스 현장 반팔티 - M', stock: 50, defaultDailyLimit: 25, image: './images/item05.png' },
+      { id: 'item06', name: '2023 Worlds 준결승 반팔티 - M', stock: 50, defaultDailyLimit: 25, image: './images/item06.png' },
+      { id: 'item07', name: 'Ward Squeeze', stock: 100, defaultDailyLimit: 50, image: './images/item07.png' },
+      { id: 'item08', name: "Poppy's Hammer Squeeze", stock: 100, defaultDailyLimit: 50, image: './images/item08.png' },
+      { id: 'item09', name: "Thresh's lantern Squeeze", stock: 100, defaultDailyLimit: 50, image: './images/item09.png' },
+      { id: 'item10', name: '폼볼-그라가스술통', stock: 100, defaultDailyLimit: 50, image: './images/item10.png' },
+      { id: 'item11', name: "Maokai's Sapling Foam Ball", stock: 200, defaultDailyLimit: 100, image: './images/item11.png' },
+      { id: 'item12', name: '아케인 시즌 2 포스터', stock: 200, defaultDailyLimit: 100, image: './images/item12.png' }
     ];
 
     let boardData = [];
@@ -559,18 +562,26 @@
       return copied;
     }
 
+    function getDailyLimitSum() {
+      return itemConfig.reduce((sum, item) => sum + Number(dailyLimits[item.id] || 0), 0);
+    }
+
     function loadDailyLimits() {
       const saved = localStorage.getItem(DAILY_LIMIT_KEY);
+
       if (saved) {
         try {
           dailyLimits = JSON.parse(saved);
-          return;
+
+          const sum = Object.values(dailyLimits).reduce((a, b) => a + Number(b || 0), 0);
+          if (sum <= totalCount) return;
         } catch (e) {}
       }
 
       itemConfig.forEach(item => {
         dailyLimits[item.id] = item.defaultDailyLimit;
       });
+
       saveDailyLimitsToStorage();
     }
 
@@ -583,7 +594,8 @@
       const today = getTodayKey();
 
       itemConfig.forEach(item => {
-        const limit = Number(dailyLimits[item.id] || item.defaultDailyLimit);
+        const limit = Number(dailyLimits[item.id] || 0);
+
         for (let i = 0; i < limit; i++) {
           pool.push({
             itemId: item.id,
@@ -597,7 +609,7 @@
 
       if (pool.length > totalCount) {
         alert(`품목별 일일 수량 합계가 500개를 초과했습니다. 현재 합계: ${pool.length}개`);
-        return [];
+        return createFallbackBoardData();
       }
 
       while (pool.length < totalCount) {
@@ -616,16 +628,42 @@
       }));
     }
 
+    function createFallbackBoardData() {
+      const today = getTodayKey();
+      return Array.from({ length: totalCount }, (_, index) => ({
+        itemId: 'blank',
+        opened: false,
+        openedAt: null,
+        openedDate: null,
+        boardDate: today,
+        number: index + 1
+      }));
+    }
+
     function saveBoardData() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(boardData));
     }
 
     function loadBoardData() {
       const saved = localStorage.getItem(STORAGE_KEY);
+
       if (saved) {
         try {
           boardData = JSON.parse(saved);
-          if (boardData.length === totalCount) return;
+
+          if (boardData.length === totalCount) {
+            boardData = boardData.map((cell, index) => ({
+              itemId: cell.itemId || 'blank',
+              opened: Boolean(cell.opened),
+              openedAt: cell.openedAt || null,
+              openedDate: cell.openedDate || null,
+              boardDate: cell.boardDate || getTodayKey(),
+              number: cell.number || index + 1
+            }));
+
+            saveBoardData();
+            return;
+          }
         } catch (e) {}
       }
 
@@ -641,6 +679,7 @@
           image: './images/blank.png'
         };
       }
+
       return itemConfig.find(item => item.id === id);
     }
 
@@ -651,10 +690,6 @@
 
     function getTotalUsed() {
       return boardData.filter(cell => cell.opened).length;
-    }
-
-    function getTodayRemaining() {
-      return Math.max(0, totalCount - getTodayUsedTotal());
     }
 
     function getTodayItemUsed(itemId) {
@@ -675,7 +710,7 @@
           <div class="item-no">${String(index + 1).padStart(2, '0')}</div>
           <img src="${item.image}" alt="${item.name}" onerror="this.src='https://placehold.co/400x300/ffffff/d71920?text=${String(index + 1).padStart(2, '0')}'">
           <div class="item-name">${item.name}</div>
-          <div class="item-limit">일일 최대 ${limit} ea / 사용 ${used} ea</div>
+          <div class="item-limit">전체 ${item.stock} ea / 일일 ${limit} ea / 사용 ${used} ea</div>
         `;
         itemList.appendChild(card);
       });
@@ -684,11 +719,19 @@
     function renderBoard() {
       drawGrid.innerHTML = '';
 
+      // 혹시 데이터가 비어 있어도 반드시 500개의 알을 화면에 표시
+      if (!Array.isArray(boardData) || boardData.length !== totalCount) {
+        boardData = createNewBoardData();
+        saveBoardData();
+      }
+
       boardData.forEach((data, index) => {
         const cell = document.createElement('button');
         cell.className = 'cell';
         cell.type = 'button';
+
         if (data.opened) cell.classList.add('opened');
+
         cell.innerHTML = `<span>${data.number || index + 1}</span>`;
         cell.addEventListener('click', () => openCell(index));
         drawGrid.appendChild(cell);
@@ -734,6 +777,7 @@
       resultName.textContent = item.name;
 
       resultPopup.classList.add('show');
+
       setTimeout(() => {
         resultPopup.classList.remove('show');
       }, 2200);
@@ -760,7 +804,7 @@
         row.className = 'setting-row';
         row.innerHTML = `
           ${String(index + 1).padStart(2, '0')}. ${item.name}
-          <input type="number" min="0" id="limit-${item.id}" value="${dailyLimits[item.id] || 0}">
+          <input type="number" min="0" max="${item.stock}" id="limit-${item.id}" value="${dailyLimits[item.id] || 0}">
         `;
         dailySettingGrid.appendChild(row);
       });
@@ -772,6 +816,12 @@
 
       itemConfig.forEach(item => {
         const value = Number(document.getElementById(`limit-${item.id}`).value || 0);
+
+        if (value > item.stock) {
+          alert(`${item.name}의 일일 수량은 전체 보유 수량 ${item.stock}개를 초과할 수 없습니다.`);
+          return;
+        }
+
         newLimits[item.id] = value;
         sum += value;
       });
@@ -784,7 +834,7 @@
       dailyLimits = newLimits;
       saveDailyLimitsToStorage();
 
-      alert('일일 수량이 저장되었습니다. 변경된 수량은 뽑기판 초기화 후 새롭게 반영됩니다.');
+      alert('일일 수량이 저장되었습니다. 변경된 수량은 [뽑기판 전체 초기화] 후 새롭게 반영됩니다.');
       renderBoard();
     }
 

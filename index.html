@@ -31,51 +31,19 @@
       width: min(100%, 1280px);
       margin: 0 auto;
       padding: 28px 18px 48px;
-      background:
-        linear-gradient(135deg, rgba(215,25,32,.18) 0 18%, transparent 18% 100%),
-        radial-gradient(circle at 85% 8%, rgba(215,25,32,.25), transparent 24%),
-        linear-gradient(180deg, #111 0%, #050505 100%);
+      background: url('./background.png') center center / cover no-repeat;
     }
 
     .top-visual {
+      margin-bottom: 26px;
+    }
+
+    .header-banner {
+      width: 100%;
+      display: block;
       border: 3px solid var(--white);
       box-shadow: 12px 12px 0 var(--red);
-      padding: 34px 20px 28px;
-      margin-bottom: 26px;
-      background:
-        radial-gradient(circle at 50% 18%, rgba(215,25,32,.24), transparent 28%),
-        linear-gradient(135deg, #111 0%, #050505 70%, #30080a 100%);
-      text-align: center;
-    }
-
-    .main-logo-image {
-      width: min(760px, 92%);
-      min-height: 140px;
-      margin: 0 auto 18px;
-      display: grid;
-      place-items: center;
-      border: 2px dashed rgba(255,255,255,.25);
-      color: rgba(255,255,255,.55);
-      font-family: Pretendard, sans-serif;
-      font-weight: 800;
-      background: rgba(255,255,255,.04);
-    }
-
-    .main-logo-image img {
-      width: 100%;
-      max-height: 230px;
-      object-fit: contain;
-      display: block;
-    }
-
-    .sub-text {
-      margin: 0;
-      font-family: Pretendard, sans-serif;
-      font-size: 18px;
-      font-weight: 800;
-      line-height: 1.5;
-      text-align: center;
-      word-break: keep-all;
+      background: #111;
     }
 
     .item-area {
@@ -222,21 +190,43 @@
       color: rgba(255,255,255,.82);
     }
 
+    .page-tabs {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .page-tab {
+      padding: 14px 8px;
+      border: 2px solid #fff;
+      background: #222;
+      color: #fff;
+      font-family: Pretendard, sans-serif;
+      font-size: 15px;
+      font-weight: 900;
+      box-shadow: none;
+    }
+
+    .page-tab.active {
+      background: var(--red);
+    }
+
     .draw-grid {
       display: grid;
-      grid-template-columns: repeat(25, minmax(0, 1fr));
-      gap: 6px;
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+      gap: 10px;
     }
 
     .cell {
       position: relative;
-      aspect-ratio: 1 / 1;
+      min-height: 64px;
       border: 0;
-      border-radius: 8px;
+      border-radius: 12px;
       background: linear-gradient(180deg, #c91a20, #8f1116);
       color: #fff;
       font-family: Impact, "Arial Black", sans-serif;
-      font-size: 15px;
+      font-size: 18px;
       text-shadow: 1px 1px 0 #000;
       cursor: pointer;
       box-shadow: inset -3px -4px 0 rgba(0,0,0,.24), 0 3px 0 #4c070a;
@@ -448,22 +438,42 @@
     @media (max-width: 900px) {
       .item-list { grid-template-columns: repeat(3, 1fr); }
       .setting-grid { grid-template-columns: repeat(2, 1fr); }
-      .draw-grid { gap: 4px; }
-      .cell { font-size: 11px; border-radius: 5px; }
+      .draw-grid {
+        grid-template-columns: repeat(10, minmax(0, 1fr));
+        gap: 8px;
+      }
+      .cell {
+        min-height: 62px;
+        font-size: 16px;
+      }
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .page-tabs {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .draw-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .cell {
+        min-height: 70px;
+        font-size: 18px;
+      }
     }
 
     @media (max-width: 520px) {
       .page { padding: 16px 8px 36px; }
-      .top-visual { padding: 24px 10px; }
-      .sub-text { font-size: 14px; }
       .item-list { grid-template-columns: repeat(2, 1fr); }
       .item-card { min-height: 190px; grid-template-rows: 95px auto auto; }
       .item-card img { height: 95px; }
       .board-wrap { padding: 10px; }
       .board-header { display: block; text-align: center; }
-      .draw-grid { gap: 3px; }
-      .cell { font-size: 8px; border-radius: 4px; }
+      .draw-grid { gap: 8px; }
+      .cell { font-size: 16px; border-radius: 10px; }
     }
   </style>
 </head>
@@ -471,11 +481,7 @@
   <main class="page">
 
     <section class="top-visual">
-      <div class="main-logo-image">
-      <img src="./images/main-logo.png" alt="LUCKY DRAW LOGO">
-      
-      </div>
-      <p class="sub-text">구매 고객 대상 랜덤 뽑기 이벤트입니다. 원하는 알을 직접 선택하면 당첨 아이템이 공개됩니다.</p>
+      <img src="./header-banner.png" class="header-banner" alt="Lucky Draw">
     </section>
 
     <section class="item-area">
@@ -498,7 +504,8 @@
         <strong>LUCKY BOARD</strong>
         <div>오늘 남은 뽑기 가능 수량 <span class="board-count" id="publicTodayRemaining">500 / 500</span></div>
       </div>
-      <p class="board-guide">아래 1번부터 500번까지의 알 중 원하는 번호를 직접 선택하세요.</p>
+      <p class="board-guide">번호 구간을 선택한 뒤 원하는 알을 눌러주세요.</p>
+      <div class="page-tabs" id="pageTabs"></div>
       <div class="draw-grid" id="drawGrid"></div>
     </section>
 
@@ -539,7 +546,7 @@
       </div>
     </section>
 
-    <p class="notice" id="notice">1번부터 500번까지 원하는 알을 선택해주세요. Firebase로 모든 기기에서 수량이 연동됩니다.</p>
+    <p class="notice" id="notice">Firebase로 모든 기기에서 수량이 연동됩니다.</p>
   </main>
 
   <div class="result-popup" id="resultPopup">
@@ -551,13 +558,6 @@
   </div>
 
   <script>
-    /*
-      Firebase Realtime Database 사용 버전
-      - 여러 PC/태블릿에서 같은 500알 상태 공유
-      - 알 클릭 시 Firebase transaction으로 중복 뽑기 방지
-      - 사용 기록은 drawLogs에 자동 저장
-    */
-
     const firebaseConfig = {
       apiKey: "AIzaSyBlTNldUhqkRLdr52NBTwl-SgZKVd0yuaI",
       authDomain: "sprit-5e81c.firebaseapp.com",
@@ -579,6 +579,7 @@
     const metaRef = db.ref(`${EVENT_ID}/meta`);
 
     const drawGrid = document.getElementById('drawGrid');
+    const pageTabs = document.getElementById('pageTabs');
     const itemList = document.getElementById('itemList');
     const notice = document.getElementById('notice');
     const resultPopup = document.getElementById('resultPopup');
@@ -594,20 +595,22 @@
 
     const ADMIN_PASSWORD = '1234';
     const totalCount = 500;
+    const eggsPerPage = 100;
+    let currentPage = 0;
 
     const itemConfig = [
-      { id: 'item01', name: '10주년 기념 LP 음반', stock: 10, defaultDailyLimit: 5, image: './images/item01.png' },
-      { id: 'item02', name: '2025 First Stand 배지', stock: 30, defaultDailyLimit: 15, image: './images/item02.png' },
-      { id: 'item03', name: '아케인 XL 마우스패드', stock: 30, defaultDailyLimit: 15, image: './images/item03.png' },
-      { id: 'item04', name: 'Worlds 2023 Premium Pen Monami Figure Set', stock: 30, defaultDailyLimit: 15, image: './images/item04.png' },
-      { id: 'item05', name: '2023 Worlds 스위스 현장 반팔티 - M', stock: 50, defaultDailyLimit: 25, image: './images/item05.png' },
-      { id: 'item06', name: '2023 Worlds 준결승 반팔티 - M', stock: 50, defaultDailyLimit: 25, image: './images/item06.png' },
-      { id: 'item07', name: 'Ward Squeeze', stock: 100, defaultDailyLimit: 50, image: './images/item07.png' },
-      { id: 'item08', name: "Poppy's Hammer Squeeze", stock: 100, defaultDailyLimit: 50, image: './images/item08.png' },
-      { id: 'item09', name: "Thresh's lantern Squeeze", stock: 100, defaultDailyLimit: 50, image: './images/item09.png' },
-      { id: 'item10', name: '폼볼-그라가스술통', stock: 100, defaultDailyLimit: 50, image: './images/item10.png' },
-      { id: 'item11', name: "Maokai's Sapling Foam Ball", stock: 200, defaultDailyLimit: 100, image: './images/item11.png' },
-      { id: 'item12', name: '아케인 시즌 2 포스터', stock: 200, defaultDailyLimit: 100, image: './images/item12.png' }
+      { id: 'item01', name: '10주년 기념 LP 음반', stock: 10, defaultDailyLimit: 5, image: './item01.png' },
+      { id: 'item02', name: '2025 First Stand 배지', stock: 30, defaultDailyLimit: 15, image: './item02.png' },
+      { id: 'item03', name: '아케인 XL 마우스패드', stock: 30, defaultDailyLimit: 15, image: './item03.png' },
+      { id: 'item04', name: 'Worlds 2023 Premium Pen Monami Figure Set', stock: 30, defaultDailyLimit: 15, image: './item04.png' },
+      { id: 'item05', name: '2023 Worlds 스위스 현장 반팔티 - M', stock: 50, defaultDailyLimit: 25, image: './item05.png' },
+      { id: 'item06', name: '2023 Worlds 준결승 반팔티 - M', stock: 50, defaultDailyLimit: 25, image: './item06.png' },
+      { id: 'item07', name: 'Ward Squeeze', stock: 100, defaultDailyLimit: 50, image: './item07.png' },
+      { id: 'item08', name: "Poppy's Hammer Squeeze", stock: 100, defaultDailyLimit: 50, image: './item08.png' },
+      { id: 'item09', name: "Thresh's lantern Squeeze", stock: 100, defaultDailyLimit: 50, image: './item09.png' },
+      { id: 'item10', name: '폼볼-그라가스술통', stock: 100, defaultDailyLimit: 50, image: './item10.png' },
+      { id: 'item11', name: "Maokai's Sapling Foam Ball", stock: 200, defaultDailyLimit: 100, image: './item11.png' },
+      { id: 'item12', name: '아케인 시즌 2 포스터', stock: 200, defaultDailyLimit: 100, image: './item12.png' }
     ];
 
     let boardData = [];
@@ -684,7 +687,7 @@
         return {
           id: 'blank',
           name: '아쉽지만 다음 기회에!',
-          image: './images/blank.png'
+          image: './blank.png'
         };
       }
 
@@ -787,6 +790,28 @@
       });
     }
 
+    function renderPageTabs() {
+      pageTabs.innerHTML = '';
+      const totalPages = Math.ceil(totalCount / eggsPerPage);
+
+      for (let i = 0; i < totalPages; i++) {
+        const tab = document.createElement('button');
+        tab.className = 'page-tab';
+        if (i === currentPage) tab.classList.add('active');
+
+        const start = i * eggsPerPage + 1;
+        const end = Math.min((i + 1) * eggsPerPage, totalCount);
+
+        tab.textContent = `${start} ~ ${end}`;
+        tab.addEventListener('click', () => {
+          currentPage = i;
+          renderBoard();
+        });
+
+        pageTabs.appendChild(tab);
+      }
+    }
+
     function renderBoard() {
       drawGrid.innerHTML = '';
 
@@ -797,15 +822,22 @@
         return;
       }
 
-      boardData.forEach((data, index) => {
+      renderPageTabs();
+
+      const startIndex = currentPage * eggsPerPage;
+      const endIndex = Math.min(startIndex + eggsPerPage, totalCount);
+
+      boardData.slice(startIndex, endIndex).forEach((data, localIndex) => {
+        const realIndex = startIndex + localIndex;
+
         const cell = document.createElement('button');
         cell.className = 'cell';
         cell.type = 'button';
 
         if (data.opened) cell.classList.add('opened');
 
-        cell.innerHTML = `<span>${data.number || index + 1}</span>`;
-        cell.addEventListener('click', () => openCell(index));
+        cell.innerHTML = `<span>${data.number || realIndex + 1}</span>`;
+        cell.addEventListener('click', () => openCell(realIndex));
         drawGrid.appendChild(cell);
       });
 
@@ -949,6 +981,8 @@
 
       const newBoard = createNewBoardData();
       if (!newBoard) return;
+
+      currentPage = 0;
 
       await boardRef.set(newBoard);
       await metaRef.update({

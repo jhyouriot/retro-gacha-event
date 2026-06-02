@@ -3,291 +3,360 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RIOT STYLE LUCKY DRAW</title>
+  <title>RIOT STORE LUCKY DRAW</title>
   <style>
     * { box-sizing: border-box; }
+
     :root {
-      --black: #0a0a0a;
-      --dark: #151515;
+      --black: #050505;
+      --dark: #111;
       --white: #f7f7f2;
-      --red: #d81920;
-      --red-dark: #8f1116;
-      --gray: #d7d7d7;
+      --red: #d71920;
+      --red-dark: #8b0f14;
+      --line: #dcdcdc;
     }
+
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: Impact, 'Arial Black', 'Pretendard', sans-serif;
-      background: var(--black);
+      background: #050505;
       color: var(--white);
-      overflow-x: hidden;
+      font-family: Impact, "Arial Black", "Pretendard", sans-serif;
     }
+
     .page {
-      position: relative;
-      width: min(100%, 1180px);
-      min-height: 100vh;
+      width: min(100%, 1280px);
       margin: 0 auto;
-      padding: 34px 18px 64px;
+      padding: 28px 18px 48px;
       background:
-        linear-gradient(135deg, rgba(216,25,32,.12) 0 18%, transparent 18% 100%),
-        radial-gradient(circle at 82% 8%, rgba(216,25,32,.28), transparent 18%),
+        linear-gradient(135deg, rgba(215,25,32,.18) 0 18%, transparent 18% 100%),
+        radial-gradient(circle at 85% 8%, rgba(215,25,32,.25), transparent 24%),
         linear-gradient(180deg, #111 0%, #050505 100%);
-      overflow: hidden;
     }
-    .slash {
-      position: absolute;
-      width: 460px;
-      height: 86px;
-      background: var(--red);
-      transform: rotate(-18deg);
-      opacity: .9;
-      z-index: 0;
-    }
-    .slash.one { right: -160px; top: 84px; }
-    .slash.two { left: -210px; bottom: 120px; background: #fff; opacity: .08; }
 
-    .event-banner {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: 36% 64%;
-      gap: 24px;
-      align-items: center;
-      margin-bottom: 24px;
-      padding: 24px;
+    .top-visual {
       border: 3px solid var(--white);
-      background: linear-gradient(135deg, #181818 0%, #090909 72%, #3c080a 100%);
       box-shadow: 12px 12px 0 var(--red);
-    }
-    .banner-image {
-      min-height: 250px;
-      border: 3px solid var(--red);
+      padding: 34px 20px 28px;
+      margin-bottom: 26px;
       background:
-        radial-gradient(circle at 50% 42%, rgba(216,25,32,.25), transparent 42%),
-        #f0eee7;
-      display: grid;
-      place-items: center;
-      color: #111;
-      font-size: 94px;
-    }
-    .banner-copy .eyebrow {
-      display: inline-block;
-      margin-bottom: 8px;
-      padding: 6px 12px;
-      background: var(--red);
-      color: var(--white);
-      font-size: 16px;
-      letter-spacing: 1px;
-    }
-    .banner-copy h1 {
-      margin: 0;
-      font-size: clamp(42px, 8vw, 96px);
-      line-height: .86;
-      letter-spacing: -2px;
-      color: var(--white);
-      text-shadow: 5px 5px 0 var(--red);
-    }
-    .banner-copy p {
-      margin: 16px 0 0;
-      font-family: 'Pretendard', sans-serif;
-      font-size: 16px;
-      line-height: 1.6;
-      word-break: keep-all;
-    }
-
-    .item-name-area {
-      position: relative;
-      z-index: 2;
-      margin: 0 0 18px;
-      padding: 18px;
-      border: 3px solid var(--red);
-      background: var(--white);
-      color: var(--black);
-      box-shadow: 8px 8px 0 rgba(216,25,32,.8);
-    }
-    .item-name-area strong {
-      display: block;
-      margin-bottom: 14px;
-      font-size: 28px;
-      letter-spacing: -1px;
-    }
-    .item-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 12px;
-    }
-    .item-card {
-      border: 2px solid #111;
-      background: #fff;
-      min-height: 160px;
-      padding: 10px;
-      display: grid;
-      grid-template-rows: 108px auto auto;
-      gap: 6px;
-      align-items: center;
+        radial-gradient(circle at 50% 18%, rgba(215,25,32,.24), transparent 28%),
+        linear-gradient(135deg, #111 0%, #050505 70%, #30080a 100%);
       text-align: center;
     }
-    .item-card img {
-      width: 100%;
-      height: 108px;
-      object-fit: contain;
-      background: #eee;
+
+    .main-logo-image {
+      width: min(760px, 92%);
+      min-height: 140px;
+      margin: 0 auto 18px;
+      display: grid;
+      place-items: center;
+      border: 2px dashed rgba(255,255,255,.25);
+      color: rgba(255,255,255,.55);
+      font-family: Pretendard, sans-serif;
+      font-weight: 800;
+      background: rgba(255,255,255,.04);
     }
-    .item-card .name {
-      font-family: 'Pretendard', sans-serif;
-      font-weight: 900;
-      font-size: 13px;
+
+    .main-logo-image img {
+      width: 100%;
+      max-height: 230px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .sub-text {
+      margin: 0;
+      font-family: Pretendard, sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 1.5;
+      text-align: center;
       word-break: keep-all;
     }
-    .item-card .qty {
-      display: none;
-      justify-self: center;
-      padding: 3px 8px;
+
+    .item-area {
+      padding: 20px;
+      margin-bottom: 26px;
+      background: var(--white);
+      color: var(--black);
+      border: 3px solid var(--red);
+      box-shadow: 10px 10px 0 var(--red-dark);
+    }
+
+    .section-title {
+      margin: 0 0 16px;
+      font-size: 30px;
+      letter-spacing: -1px;
+    }
+
+    .item-list {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 14px;
+    }
+
+    .item-card {
+      position: relative;
+      min-height: 220px;
+      padding: 12px;
+      border: 2px solid #222;
+      background: #fff;
+      text-align: center;
+      display: grid;
+      grid-template-rows: 118px auto auto;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .item-no {
+      position: absolute;
+      top: 7px;
+      left: 7px;
+      padding: 3px 7px;
       background: var(--red);
       color: #fff;
-      font-size: 12px;
+      font-size: 13px;
+      line-height: 1;
     }
-    body.admin .item-card .qty { display: inline-block; }
+
+    .item-card img {
+      width: 100%;
+      height: 118px;
+      object-fit: contain;
+      background: #f1f1f1;
+    }
+
+    .item-name {
+      font-family: Pretendard, sans-serif;
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1.35;
+      word-break: keep-all;
+    }
+
+    .item-limit {
+      display: none;
+      justify-self: center;
+      padding: 5px 8px;
+      background: #111;
+      color: #fff;
+      font-family: Pretendard, sans-serif;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    body.admin .item-limit { display: inline-block; }
 
     .admin-stats {
       display: none;
-      position: relative;
-      z-index: 2;
-      margin: 0 0 18px;
-      padding: 16px;
+      margin-bottom: 22px;
+      padding: 18px;
       border: 3px solid var(--white);
-      background: #151515;
-      box-shadow: 8px 8px 0 var(--red-dark);
-      font-family: 'Pretendard', sans-serif;
+      background: #111;
+      box-shadow: 9px 9px 0 var(--red-dark);
+      font-family: Pretendard, sans-serif;
     }
+
     body.admin .admin-stats { display: block; }
-    .admin-stats h3 {
-      margin: 0 0 10px;
-      font-family: Impact, 'Arial Black', sans-serif;
-      font-size: 26px;
-      letter-spacing: 1px;
-      color: var(--white);
-    }
+
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
     }
+
     .stat-card {
-      padding: 12px;
+      padding: 14px;
       background: #fff;
       color: #111;
       border-left: 8px solid var(--red);
       font-weight: 900;
     }
+
     .stat-card span {
       display: block;
-      margin-top: 4px;
+      margin-top: 6px;
       color: var(--red);
-      font-size: 26px;
+      font-size: 30px;
+      font-family: Impact, "Arial Black", sans-serif;
     }
 
     .board-wrap {
-      position: relative;
-      z-index: 2;
-      background: #fff;
+      padding: 16px;
+      background: #090909;
       border: 4px solid #fff;
       box-shadow: 12px 12px 0 var(--red-dark);
-      overflow: hidden;
     }
-    .stamp-row {
-      display: grid;
-      grid-template-columns: repeat(25, 1fr);
-      height: 34px;
-      background: #111;
+
+    .board-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      font-family: Pretendard, sans-serif;
+      font-weight: 900;
     }
-    .stamp {
-      display: grid;
-      place-items: center;
-      border-right: 1px solid rgba(255,255,255,.24);
-      font-size: 18px;
-      color: #fff;
-      background: repeating-linear-gradient(135deg, #111 0 8px, #2b2b2b 8px 16px);
+
+    .board-header strong {
+      font-family: Impact, "Arial Black", sans-serif;
+      font-size: 32px;
+      letter-spacing: .5px;
     }
+
+    .board-count {
+      color: #ffe15a;
+      font-size: 20px;
+    }
+
+    .board-guide {
+      margin: -4px 0 14px;
+      font-family: Pretendard, sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      color: rgba(255,255,255,.82);
+    }
+
+    .egg-select-area {
+      margin-top: 26px;
+    }
+
     .draw-grid {
       display: grid;
       grid-template-columns: repeat(25, 1fr);
-      grid-template-rows: repeat(20, 34px);
-      background: #181818;
+      gap: 6px;
     }
+
     .cell {
       position: relative;
+      aspect-ratio: 1 / 1;
       border: 0;
-      border-right: 1px solid rgba(255,255,255,.28);
-      border-bottom: 1px solid rgba(255,255,255,.28);
-      background: #d81920;
+      border-radius: 8px;
+      background: linear-gradient(180deg, #c91a20, #8f1116);
+      color: #fff;
+      font-family: Impact, "Arial Black", sans-serif;
+      font-size: 15px;
+      text-shadow: 1px 1px 0 #000;
       cursor: pointer;
-      transition: .12s ease;
-      padding: 0;
+      box-shadow: inset -3px -4px 0 rgba(0,0,0,.24), 0 3px 0 #4c070a;
+      overflow: hidden;
     }
+
     .cell::before {
-      content: '';
+      content: "";
       position: absolute;
-      inset: 4px;
+      width: 52%;
+      height: 52%;
+      left: 8%;
+      top: 8%;
       border-radius: 50%;
-      background: radial-gradient(circle at 35% 30%, #fff 0 12%, #ed4a4f 13% 45%, #9f1217 46% 100%);
-      box-shadow: inset -3px -4px 0 rgba(0,0,0,.24), 0 2px 0 rgba(0,0,0,.28);
+      background: radial-gradient(circle, #fff 0 16%, rgba(255,255,255,.25) 17% 100%);
+      opacity: .9;
     }
-    .cell:hover::before { filter: brightness(1.25); transform: scale(1.06); }
+
+    .cell span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .cell:hover { filter: brightness(1.18); transform: translateY(-1px); }
+
     .cell.opened {
-      background: #111;
+      background: #090909;
+      color: transparent;
       cursor: default;
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,.05);
     }
-    .cell.opened::before { display: none; }
-    .cell.opened::after {
-      content: '';
-      position: absolute;
-      inset: 7px;
-      border-radius: 50%;
-      background: #050505;
+
+    .cell.opened::before {
+      width: 76%;
+      height: 42%;
+      left: 12%;
+      top: 28%;
+      background: #000;
       border: 1px dashed rgba(255,255,255,.18);
+      opacity: 1;
     }
 
     .admin-panel {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
       justify-content: center;
-      margin-top: 22px;
-      position: relative;
-      z-index: 2;
-      font-family: 'Pretendard', sans-serif;
+      align-items: center;
+      gap: 12px;
+      margin-top: 26px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(255,255,255,.25);
+      font-family: Pretendard, sans-serif;
     }
-    button, input {
+
+    input, button, select {
       border: 0;
-      padding: 12px 18px;
+      padding: 12px 16px;
+      font-family: Pretendard, sans-serif;
       font-weight: 900;
-      font-size: 15px;
-      font-family: inherit;
+      font-size: 14px;
     }
-    button {
-      color: var(--white);
-      background: var(--red);
-      box-shadow: 0 5px 0 var(--red-dark);
-      cursor: pointer;
-    }
-    button:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--red-dark); }
+
     input {
-      width: 180px;
-      color: #111;
+      width: 190px;
       background: #fff;
-      outline: none;
+      color: #111;
     }
+
+    button {
+      background: var(--red);
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 4px 0 var(--red-dark);
+    }
+
+    button:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 var(--red-dark);
+    }
+
     .admin-only { display: none; }
     body.admin .admin-only { display: inline-flex; }
+
+    .daily-setting {
+      display: none;
+      width: 100%;
+      margin-top: 16px;
+      padding: 16px;
+      background: #fff;
+      color: #111;
+      border: 3px solid var(--red);
+    }
+
+    body.admin .daily-setting { display: block; }
+
+    .setting-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .setting-row {
+      display: grid;
+      gap: 5px;
+      font-family: Pretendard, sans-serif;
+      font-weight: 900;
+      font-size: 12px;
+    }
+
+    .setting-row input {
+      width: 100%;
+      border: 1px solid #ccc;
+    }
+
     .notice {
+      margin-top: 14px;
       text-align: center;
-      margin-top: 12px;
-      font-family: 'Pretendard', sans-serif;
-      font-size: 13px;
       opacity: .82;
-      position: relative;
-      z-index: 2;
+      font-family: Pretendard, sans-serif;
+      font-size: 13px;
     }
 
     .result-popup {
@@ -296,114 +365,150 @@
       z-index: 99;
       display: none;
       place-items: center;
-      background: rgba(0,0,0,.62);
+      background: rgba(0,0,0,.72);
       backdrop-filter: blur(4px);
     }
-    .result-popup.show { display: grid; animation: fadeIn .18s ease; }
+
+    .result-popup.show {
+      display: grid;
+      animation: fadeIn .16s ease;
+    }
+
     .result-card {
-      width: min(86vw, 430px);
+      width: min(88vw, 460px);
       padding: 26px;
       border: 5px solid #fff;
-      background: linear-gradient(180deg, #fff 0%, #e9e9e9 100%);
+      background: #fff;
       color: #111;
       text-align: center;
       box-shadow: 14px 14px 0 var(--red);
-      animation: prizePop .28s ease-out;
+      animation: prizePop .25s ease-out;
     }
+
     .result-card img {
       width: 100%;
-      height: 230px;
+      height: 250px;
       object-fit: contain;
-      background: #eee;
+      background: #f1f1f1;
       border: 2px solid #111;
       margin-bottom: 14px;
     }
+
     .result-card .label {
       display: inline-block;
-      padding: 5px 10px;
+      padding: 6px 12px;
       background: var(--red);
       color: #fff;
-      font-size: 14px;
+      font-size: 15px;
       margin-bottom: 8px;
     }
+
     .result-card h2 {
       margin: 0;
       font-size: 28px;
-      line-height: 1.2;
+      line-height: 1.25;
       word-break: keep-all;
     }
+
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes prizePop {
-      from { transform: scale(.78) rotate(-2deg); opacity: 0; }
-      to { transform: scale(1) rotate(0); opacity: 1; }
+      from { transform: scale(.78); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
     }
 
-    @media (max-width: 720px) {
-      .page { padding: 20px 10px 42px; }
-      .event-banner { grid-template-columns: 1fr; text-align: center; padding: 16px; box-shadow: 7px 7px 0 var(--red); }
-      .banner-image { min-height: 160px; font-size: 72px; }
-      .draw-grid { grid-template-rows: repeat(20, 25px); }
-      .stamp-row { height: 26px; }
-      .stamp { font-size: 13px; }
-      .cell::before { inset: 3px; }
+    @media (max-width: 900px) {
+      .item-list { grid-template-columns: repeat(3, 1fr); }
+      .setting-grid { grid-template-columns: repeat(2, 1fr); }
+      .draw-grid { gap: 4px; }
+      .cell { font-size: 11px; border-radius: 5px; }
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 520px) {
+      .page { padding: 16px 8px 36px; }
+      .top-visual { padding: 24px 10px; }
+      .sub-text { font-size: 14px; }
+      .item-list { grid-template-columns: repeat(2, 1fr); }
+      .item-card { min-height: 190px; grid-template-rows: 95px auto auto; }
+      .item-card img { height: 95px; }
+      .board-wrap { padding: 10px; }
+      .board-header { display: block; text-align: center; }
+      .draw-grid { gap: 3px; }
+      .cell { font-size: 8px; border-radius: 4px; }
     }
   </style>
 </head>
 <body>
   <main class="page">
-    <div class="slash one"></div>
-    <div class="slash two"></div>
 
-    <!-- 상단 이벤트 배너 영역 -->
-    <section class="event-banner">
-      <div class="banner-image">🎁</div>
-      <div class="banner-copy">
-        <span class="eyebrow">RIOT STORE EVENT</span>
-        <h1>LUCKY<br />DRAW</h1>
-        <p>구매 고객 대상 랜덤 뽑기 이벤트입니다. 원하는 알을 직접 선택하면 당첨 아이템이 공개됩니다.</p>
+    <!-- 상단 중앙 PNG 이미지 / 로고 / 메인 제목 영역 -->
+    <section class="top-visual">
+      <div class="main-logo-image">
+        <!-- 아래 이미지 경로를 원하는 PNG로 교체하세요. 예: ./images/main-logo.png -->
+        <!-- <img src="./images/main-logo.png" alt="LUCKY DRAW LOGO"> -->
+        PNG LOGO / MAIN TITLE AREA
       </div>
+      <p class="sub-text">구매 고객 대상 랜덤 뽑기 이벤트입니다. 원하는 알을 직접 선택하면 당첨 아이템이 공개됩니다.</p>
     </section>
 
-    <!-- 아이템 명칭/제품 사진 영역 -->
-    <section class="item-name-area">
-      <strong>ITEM LIST</strong>
+    <!-- 아이템 리스트 -->
+    <section class="item-area">
+      <h2 class="section-title">ITEM LIST</h2>
       <div class="item-list" id="itemList"></div>
     </section>
 
-    <!-- 관리자 전용 사용 현황 영역 -->
+    <!-- 관리자 전용 현황 -->
     <section class="admin-stats admin-only">
-      <h3>ADMIN STATUS</h3>
+      <h2 class="section-title">ADMIN STATUS</h2>
       <div class="stats-grid">
         <div class="stat-card">당일 총 사용 수량<span id="todayUsedCount">0</span></div>
+        <div class="stat-card">오늘 남은 뽑기 가능 수량<span id="todayRemainingCount">500</span></div>
         <div class="stat-card">전체 누적 사용 수량<span id="totalUsedCount">0</span></div>
-        <div class="stat-card">남은 총 수량<span id="totalRemainingCount">500</span></div>
       </div>
     </section>
 
-    <section class="board-wrap" aria-label="랜덤 뽑기판">
-      <div class="stamp-row" id="stampRow"></div>
+    <!-- 하단 선택 가능한 알 영역 / 1번 ~ 500번 -->
+    <section class="board-wrap egg-select-area">
+      <div class="board-header">
+        <strong>LUCKY BOARD</strong>
+        <div>오늘 남은 뽑기 가능 수량 <span class="board-count" id="publicTodayRemaining">500 / 500</span></div>
+      </div>
+      <p class="board-guide">아래 1번부터 500번까지의 알 중 원하는 번호를 직접 선택하세요.</p>
       <div class="draw-grid" id="drawGrid"></div>
     </section>
 
-    <div class="admin-panel">
-      <input id="adminPassword" type="password" placeholder="관리자 비밀번호" />
-      <button onclick="loginAdmin()">관리자 로그인</button>
-      <button class="admin-only" onclick="adminResetBoard()">관리자 초기화</button>
-    </div>
+    <!-- 관리자 -->
+    <section class="admin-panel">
+      <span>관리자 로그인</span>
+      <input id="adminPassword" type="password" placeholder="비밀번호 입력">
+      <button onclick="loginAdmin()">로그인</button>
+      <button class="admin-only" onclick="adminResetToday()">당일 기록 초기화</button>
+      <button class="admin-only" onclick="adminResetBoard()">뽑기판 전체 초기화</button>
 
-    <p class="notice" id="notice">총 500개의 알 중 원하는 알을 직접 선택해주세요. 새로고침해도 뽑기 현황은 유지됩니다.</p>
+      <div class="daily-setting admin-only">
+        <h2 class="section-title">DAILY ITEM LIMIT SETTING</h2>
+        <p style="font-weight:900; font-family:Pretendard, sans-serif;">
+          하루 뽑을 수 있는 품목별 수량을 지정하세요. 합계가 500개를 초과하면 저장되지 않습니다.
+        </p>
+        <div class="setting-grid" id="dailySettingGrid"></div>
+        <div style="margin-top:14px;">
+          <button onclick="saveDailyLimits()">일일 수량 저장</button>
+        </div>
+      </div>
+    </section>
+
+    <p class="notice" id="notice">1번부터 500번까지 원하는 알을 선택해주세요. 새로고침해도 뽑기 현황은 유지됩니다.</p>
   </main>
 
   <div class="result-popup" id="resultPopup">
     <div class="result-card">
       <span class="label">CONGRATULATIONS</span>
-      <img id="resultImage" src="" alt="당첨 아이템 이미지" />
+      <img id="resultImage" src="" alt="당첨 아이템 이미지">
       <h2 id="resultName"></h2>
     </div>
   </div>
 
   <script>
-    const stampRow = document.getElementById('stampRow');
     const drawGrid = document.getElementById('drawGrid');
     const itemList = document.getElementById('itemList');
     const notice = document.getElementById('notice');
@@ -411,41 +516,38 @@
     const resultImage = document.getElementById('resultImage');
     const resultName = document.getElementById('resultName');
     const todayUsedCount = document.getElementById('todayUsedCount');
+    const todayRemainingCount = document.getElementById('todayRemainingCount');
     const totalUsedCount = document.getElementById('totalUsedCount');
-    const totalRemainingCount = document.getElementById('totalRemainingCount');
+    const publicTodayRemaining = document.getElementById('publicTodayRemaining');
+    const dailySettingGrid = document.getElementById('dailySettingGrid');
 
-    const STORAGE_KEY = 'riotStyleLuckyDrawBoard_v3';
-    const ADMIN_PASSWORD = '1234'; // 실제 운영 시 원하는 비밀번호로 변경
-    const cols = 25;
-    const rows = 20;
-    const totalCount = cols * rows; // 500개
+    const STORAGE_KEY = 'riotLuckyDrawBoard_500_v4';
+    const DAILY_LIMIT_KEY = 'riotLuckyDrawDailyLimits_v4';
+    const ADMIN_PASSWORD = '1234';
 
-    // quantity의 합계는 반드시 500이 되어야 합니다.
-    // image는 실제 GitHub에 올린 이미지 경로로 교체하면 됩니다. 예: './images/item01.png'
+    const totalCount = 500;
+
     const itemConfig = [
-      { id: 'item01', name: '리그 오브 레전드 한정 컬렉터블', quantity: 20, image: 'https://placehold.co/400x300/ffffff/d81920?text=ITEM+01' },
-      { id: 'item02', name: '우르프 뒤집개 세트', quantity: 40, image: 'https://placehold.co/400x300/ffffff/d81920?text=ITEM+02' },
-      { id: 'item03', name: '솔라리 비치타월', quantity: 60, image: 'https://placehold.co/400x300/ffffff/d81920?text=ITEM+03' },
-      { id: 'item04', name: 'TFT 래빗 미니 피규어', quantity: 80, image: 'https://placehold.co/400x300/ffffff/d81920?text=ITEM+04' },
-      { id: 'item05', name: '포로 미니 인형', quantity: 120, image: 'https://placehold.co/400x300/ffffff/d81920?text=ITEM+05' },
-      { id: 'item06', name: '티모 아크릴 키링', quantity: 180, image: 'https://placehold.co/400x300/ffffff/d81920?text=ITEM+06' }
+      { id: 'item01', name: '10주년 기념 LP 음반', defaultDailyLimit: 10, image: './images/item01.png' },
+      { id: 'item02', name: '2025 First Stand 배지', defaultDailyLimit: 30, image: './images/item02.png' },
+      { id: 'item03', name: '아케인 XL 마우스패드', defaultDailyLimit: 30, image: './images/item03.png' },
+      { id: 'item04', name: 'Worlds 2023 Premium Pen Monami Figure Set', defaultDailyLimit: 30, image: './images/item04.png' },
+      { id: 'item05', name: '2023 Worlds 스위스 현장 반팔티 - M', defaultDailyLimit: 50, image: './images/item05.png' },
+      { id: 'item06', name: '2023 Worlds 준결승 반팔티 - M', defaultDailyLimit: 50, image: './images/item06.png' },
+      { id: 'item07', name: 'Ward Squeeze', defaultDailyLimit: 100, image: './images/item07.png' },
+      { id: 'item08', name: "Poppy's Hammer Squeeze", defaultDailyLimit: 100, image: './images/item08.png' },
+      { id: 'item09', name: "Thresh's lantern Squeeze", defaultDailyLimit: 100, image: './images/item09.png' },
+      { id: 'item10', name: '폼볼-그라가스술통', defaultDailyLimit: 100, image: './images/item10.png' },
+      { id: 'item11', name: "Maokai's Sapling Foam Ball", defaultDailyLimit: 200, image: './images/item11.png' },
+      { id: 'item12', name: '아케인 시즌 2 포스터', defaultDailyLimit: 200, image: './images/item12.png' }
     ];
 
     let boardData = [];
+    let dailyLimits = {};
 
     function getTodayKey() {
       const now = new Date();
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const date = String(now.getDate()).padStart(2, '0');
-      return `${year}-${month}-${date}`;
-    }
-
-    function validateItemQuantity() {
-      const sum = itemConfig.reduce((acc, item) => acc + item.quantity, 0);
-      if (sum !== totalCount) {
-        alert(`아이템 총 수량이 ${totalCount}개가 아닙니다. 현재 수량: ${sum}개`);
-      }
+      return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
     }
 
     function shuffle(array) {
@@ -457,22 +559,60 @@
       return copied;
     }
 
-    function createNewBoardData() {
-      const pool = [];
+    function loadDailyLimits() {
+      const saved = localStorage.getItem(DAILY_LIMIT_KEY);
+      if (saved) {
+        try {
+          dailyLimits = JSON.parse(saved);
+          return;
+        } catch (e) {}
+      }
+
       itemConfig.forEach(item => {
-        for (let i = 0; i < item.quantity; i++) {
-          pool.push({ itemId: item.id, opened: false, openedAt: null, openedDate: null });
-        }
+        dailyLimits[item.id] = item.defaultDailyLimit;
       });
-      return shuffle(pool);
+      saveDailyLimitsToStorage();
     }
 
-    function normalizeBoardData() {
-      boardData = boardData.map(cell => ({
-        itemId: cell.itemId,
-        opened: Boolean(cell.opened),
-        openedAt: cell.openedAt || null,
-        openedDate: cell.openedDate || null
+    function saveDailyLimitsToStorage() {
+      localStorage.setItem(DAILY_LIMIT_KEY, JSON.stringify(dailyLimits));
+    }
+
+    function createNewBoardData() {
+      const pool = [];
+      const today = getTodayKey();
+
+      itemConfig.forEach(item => {
+        const limit = Number(dailyLimits[item.id] || item.defaultDailyLimit);
+        for (let i = 0; i < limit; i++) {
+          pool.push({
+            itemId: item.id,
+            opened: false,
+            openedAt: null,
+            openedDate: null,
+            boardDate: today
+          });
+        }
+      });
+
+      if (pool.length > totalCount) {
+        alert(`품목별 일일 수량 합계가 500개를 초과했습니다. 현재 합계: ${pool.length}개`);
+        return [];
+      }
+
+      while (pool.length < totalCount) {
+        pool.push({
+          itemId: 'blank',
+          opened: false,
+          openedAt: null,
+          openedDate: null,
+          boardDate: today
+        });
+      }
+
+      return shuffle(pool).map((cell, index) => ({
+        ...cell,
+        number: index + 1
       }));
     }
 
@@ -485,18 +625,22 @@
       if (saved) {
         try {
           boardData = JSON.parse(saved);
-          if (boardData.length === totalCount) {
-            normalizeBoardData();
-            saveBoardData();
-            return;
-          }
+          if (boardData.length === totalCount) return;
         } catch (e) {}
       }
+
       boardData = createNewBoardData();
       saveBoardData();
     }
 
     function getItemById(id) {
+      if (id === 'blank') {
+        return {
+          id: 'blank',
+          name: '아쉽지만 다음 기회에!',
+          image: './images/blank.png'
+        };
+      }
       return itemConfig.find(item => item.id === id);
     }
 
@@ -509,57 +653,71 @@
       return boardData.filter(cell => cell.opened).length;
     }
 
-    function renderAdminStats() {
-      const used = getTotalUsed();
-      todayUsedCount.textContent = getTodayUsedTotal();
-      totalUsedCount.textContent = used;
-      totalRemainingCount.textContent = totalCount - used;
+    function getTodayRemaining() {
+      return Math.max(0, totalCount - getTodayUsedTotal());
+    }
+
+    function getTodayItemUsed(itemId) {
+      const today = getTodayKey();
+      return boardData.filter(cell => cell.itemId === itemId && cell.opened && cell.openedDate === today).length;
     }
 
     function renderItemList() {
       itemList.innerHTML = '';
-      itemConfig.forEach(item => {
-        const used = boardData.filter(cell => cell.itemId === item.id && cell.opened).length;
-        const remaining = item.quantity - used;
+
+      itemConfig.forEach((item, index) => {
+        const used = getTodayItemUsed(item.id);
+        const limit = Number(dailyLimits[item.id] || 0);
+
         const card = document.createElement('article');
         card.className = 'item-card';
         card.innerHTML = `
-          <img src="${item.image}" alt="${item.name}" />
-          <div class="name">${item.name}</div>
-          <div class="qty">사용 ${used} / 남은 ${remaining} / 총 ${item.quantity}</div>
+          <div class="item-no">${String(index + 1).padStart(2, '0')}</div>
+          <img src="${item.image}" alt="${item.name}" onerror="this.src='https://placehold.co/400x300/ffffff/d71920?text=${String(index + 1).padStart(2, '0')}'">
+          <div class="item-name">${item.name}</div>
+          <div class="item-limit">일일 최대 ${limit} ea / 사용 ${used} ea</div>
         `;
         itemList.appendChild(card);
       });
     }
 
     function renderBoard() {
-      stampRow.innerHTML = '';
       drawGrid.innerHTML = '';
-
-      for (let i = 0; i < cols; i++) {
-        const stamp = document.createElement('div');
-        stamp.className = 'stamp';
-        stamp.textContent = 'RIOT';
-        stampRow.appendChild(stamp);
-      }
 
       boardData.forEach((data, index) => {
         const cell = document.createElement('button');
         cell.className = 'cell';
         cell.type = 'button';
         if (data.opened) cell.classList.add('opened');
+        cell.innerHTML = `<span>${data.number || index + 1}</span>`;
         cell.addEventListener('click', () => openCell(index));
         drawGrid.appendChild(cell);
       });
+
       renderItemList();
       renderAdminStats();
     }
 
+    function renderAdminStats() {
+      const todayUsed = getTodayUsedTotal();
+      todayUsedCount.textContent = todayUsed;
+      todayRemainingCount.textContent = totalCount - todayUsed;
+      totalUsedCount.textContent = getTotalUsed();
+      publicTodayRemaining.textContent = `${totalCount - todayUsed} / ${totalCount}`;
+    }
+
     function openCell(index) {
       if (boardData[index].opened) return;
+
+      if (getTodayUsedTotal() >= totalCount) {
+        alert('오늘 뽑기 가능 수량 500개를 모두 사용했습니다.');
+        return;
+      }
+
       boardData[index].opened = true;
       boardData[index].openedAt = new Date().toISOString();
       boardData[index].openedDate = getTodayKey();
+
       saveBoardData();
 
       const item = getItemById(boardData[index].itemId);
@@ -569,10 +727,13 @@
 
     function showResultPopup(item) {
       resultImage.src = item.image;
+      resultImage.onerror = () => {
+        resultImage.src = 'https://placehold.co/400x300/ffffff/d71920?text=LUCKY+DRAW';
+      };
       resultImage.alt = item.name;
       resultName.textContent = item.name;
-      resultPopup.classList.add('show');
 
+      resultPopup.classList.add('show');
       setTimeout(() => {
         resultPopup.classList.remove('show');
       }, 2200);
@@ -580,25 +741,79 @@
 
     function loginAdmin() {
       const password = document.getElementById('adminPassword').value;
+
       if (password === ADMIN_PASSWORD) {
         document.body.classList.add('admin');
+        renderDailySetting();
         renderBoard();
-        notice.textContent = '관리자 모드입니다. 제품별 사용/남은 수량과 당일 총 사용 수량을 확인할 수 있습니다.';
+        notice.textContent = '관리자 모드입니다. 품목별 일일 수량과 사용 현황을 확인할 수 있습니다.';
       } else {
         alert('비밀번호가 올바르지 않습니다.');
       }
     }
 
+    function renderDailySetting() {
+      dailySettingGrid.innerHTML = '';
+
+      itemConfig.forEach((item, index) => {
+        const row = document.createElement('label');
+        row.className = 'setting-row';
+        row.innerHTML = `
+          ${String(index + 1).padStart(2, '0')}. ${item.name}
+          <input type="number" min="0" id="limit-${item.id}" value="${dailyLimits[item.id] || 0}">
+        `;
+        dailySettingGrid.appendChild(row);
+      });
+    }
+
+    function saveDailyLimits() {
+      const newLimits = {};
+      let sum = 0;
+
+      itemConfig.forEach(item => {
+        const value = Number(document.getElementById(`limit-${item.id}`).value || 0);
+        newLimits[item.id] = value;
+        sum += value;
+      });
+
+      if (sum > totalCount) {
+        alert(`일일 수량 합계가 500개를 초과했습니다. 현재 합계: ${sum}개`);
+        return;
+      }
+
+      dailyLimits = newLimits;
+      saveDailyLimitsToStorage();
+
+      alert('일일 수량이 저장되었습니다. 변경된 수량은 뽑기판 초기화 후 새롭게 반영됩니다.');
+      renderBoard();
+    }
+
+    function adminResetToday() {
+      if (!document.body.classList.contains('admin')) return;
+      if (!confirm('당일 사용 기록만 초기화할까요? 이미 뜯긴 알은 복구되지 않습니다.')) return;
+
+      boardData = boardData.map(cell => {
+        if (cell.openedDate === getTodayKey()) {
+          return { ...cell, openedAt: null, openedDate: null };
+        }
+        return cell;
+      });
+
+      saveBoardData();
+      renderBoard();
+    }
+
     function adminResetBoard() {
       if (!document.body.classList.contains('admin')) return;
-      if (!confirm('현재 뽑기 현황을 모두 초기화할까요? 아이템 위치도 다시 랜덤 배치됩니다.')) return;
+      if (!confirm('뽑기판 전체를 초기화할까요? 아이템 위치도 다시 랜덤 배치됩니다.')) return;
+
       boardData = createNewBoardData();
       saveBoardData();
       renderBoard();
-      notice.textContent = '관리자가 뽑기판을 초기화했습니다.';
+      notice.textContent = '관리자가 뽑기판을 전체 초기화했습니다.';
     }
 
-    validateItemQuantity();
+    loadDailyLimits();
     loadBoardData();
     renderBoard();
   </script>

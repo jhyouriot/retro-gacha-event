@@ -197,24 +197,18 @@
       padding: 0;
     }
 
-    .cell {
-  background: #d71920;
-  border-radius: 12px;
-}
+    .cell::before {
+      content: "";
+      position: absolute;
+      width: 52%;
+      height: 52%;
+      left: 8%;
+      top: 8%;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fff 0 16%, rgba(255,255,255,.25) 17% 100%);
+      opacity: .9;
+    }
 
-.cell::before {
-  content: "";
-  position: absolute;
-  inset: 18%;
-  background: url('./주먹로고.png') center center / contain no-repeat;
-  opacity: .35;
-  filter: brightness(0) invert(1);
-}
-
-.cell:hover {
-  transform: scale(1.05);
-  filter: brightness(1.1);
-}
     .cell span {
       position: relative;
       z-index: 1;
@@ -420,6 +414,83 @@
       word-break: keep-all;
     }
 
+
+
+    .soldout-popup {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      display: none;
+      place-items: center;
+      padding: 24px;
+      background: rgba(0,0,0,.88);
+      backdrop-filter: blur(6px);
+    }
+
+    .soldout-popup.show {
+      display: grid;
+      animation: fadeIn .16s ease;
+    }
+
+    body.sold-out {
+      overflow: hidden;
+    }
+
+    .soldout-card {
+      width: min(92vw, 820px);
+      padding: 46px 36px;
+      border: 6px solid #fff;
+      background: #fff;
+      color: #111;
+      text-align: center;
+      box-shadow: 16px 16px 0 var(--red);
+      font-family: Pretendard, sans-serif;
+    }
+
+    .soldout-label {
+      display: inline-block;
+      margin-bottom: 18px;
+      padding: 8px 16px;
+      background: var(--red);
+      color: #fff;
+      font-family: Impact, "Arial Black", sans-serif;
+      font-size: 22px;
+      letter-spacing: 1px;
+    }
+
+    .soldout-ko {
+      margin: 0;
+      font-size: clamp(34px, 5.4vw, 62px);
+      line-height: 1.16;
+      font-weight: 900;
+      word-break: keep-all;
+    }
+
+    .soldout-en {
+      margin: 18px 0 0;
+      font-size: clamp(22px, 3vw, 36px);
+      line-height: 1.25;
+      font-weight: 900;
+      color: #555;
+      word-break: keep-all;
+    }
+
+    .soldout-unlock {
+      margin-top: 34px;
+      padding-top: 22px;
+      border-top: 2px solid #ddd;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .soldout-unlock input {
+      border: 2px solid #111;
+      width: min(260px, 100%);
+    }
+
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes prizePop {
       from { transform: scale(.78); opacity: 0; }
@@ -532,6 +603,7 @@
       <input id="adminPassword" type="password" placeholder="비밀번호 입력">
       <button onclick="loginAdmin()">로그인</button>
       <button class="admin-only" onclick="adminResetBoard()">뽑기판 전체 초기화</button>
+      <button class="admin-only" onclick="activateSoldOut()">오늘 품절</button>
       <button class="admin-only" onclick="exportLogsCSV()">사용 기록 CSV 다운로드</button>
 
       <div class="daily-setting admin-only">
@@ -593,6 +665,18 @@
     </div>
   </div>
 
+  <div class="soldout-popup" id="soldOutPopup">
+    <div class="soldout-card">
+      <div class="soldout-label">SOLD OUT</div>
+      <h2 class="soldout-ko">오늘 준비된 이벤트 수량이 모두 소진되었습니다.</h2>
+      <p class="soldout-en">All event quantities prepared for today have been sold out.</p>
+      <div class="soldout-unlock">
+        <input id="soldOutPassword" type="password" placeholder="관리자 비밀번호 입력">
+        <button onclick="unlockSoldOut()">품절 해제</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyBlTNldUhqkRLdr52NBTwl-SgZKVd0yuaI",
@@ -613,6 +697,7 @@
     const limitsRef = db.ref(`${EVENT_ID}/dailyLimits`);
     const logsRef = db.ref(`${EVENT_ID}/drawLogs`);
     const metaRef = db.ref(`${EVENT_ID}/meta`);
+    const soldOutRef = db.ref(`${EVENT_ID}/soldOut`);
 
     const drawGrid = document.getElementById('drawGrid');
     const itemList = document.getElementById('itemList');
@@ -620,6 +705,8 @@
     const resultPopup = document.getElementById('resultPopup');
     const resultName = document.getElementById('resultName');
     const resultEngName = document.getElementById('resultEngName');
+    const soldOutPopup = document.getElementById('soldOutPopup');
+    const soldOutPassword = document.getElementById('soldOutPassword');
     const todayUsedCount = document.getElementById('todayUsedCount');
     const todayRemainingCount = document.getElementById('todayRemainingCount');
     const totalUsedCount = document.getElementById('totalUsedCount');
@@ -633,23 +720,24 @@
     const totalCount = 150;
 
     const itemConfig = [
-      { id: 'item01', name: '10주년 기념 LP 음반', engName: '10th Anniversary LP Record', stock: 10, defaultDailyLimit: 2, image: './item01.png' },
-      { id: 'item02', name: '2025 First Stand 배지', engName: '2025 First Stand Badge', stock: 30, defaultDailyLimit: 5, image: './item02.png' },
-      { id: 'item03', name: '아케인 XL 마우스패드', engName: 'Arcane XL Mousepad', stock: 30, defaultDailyLimit: 5, image: './item03.png' },
-      { id: 'item04', name: 'Worlds 2023 Premium Pen Monami Figure Set', engName: 'Worlds 2023 Premium Pen Monami Figure Set', stock: 30, defaultDailyLimit: 4, image: './item04.png' },
-      { id: 'item05', name: '2023 Worlds 스위스 현장 반팔티 - M', engName: '2023 Worlds Swiss Venue T-Shirt - M', stock: 50, defaultDailyLimit: 7, image: './item05.png' },
-      { id: 'item06', name: '2023 Worlds 준결승 반팔티 - M', engName: '2023 Worlds Semifinals T-Shirt - M', stock: 50, defaultDailyLimit: 7, image: './item06.png' },
-      { id: 'item07', name: 'Ward Squeeze', engName: 'Ward Squeeze', stock: 100, defaultDailyLimit: 15, image: './item07.png' },
-      { id: 'item08', name: "Poppy's Hammer Squeeze", engName: "Poppy's Hammer Squeeze", stock: 100, defaultDailyLimit: 15, image: './item08.png' },
-      { id: 'item09', name: "Thresh's lantern Squeeze", engName: "Thresh's Lantern Squeeze", stock: 100, defaultDailyLimit: 15, image: './item09.png' },
-      { id: 'item10', name: '폼볼-그라가스술통', engName: 'Gragas Barrel Foam Ball', stock: 100, defaultDailyLimit: 15, image: './item10.png' },
-      { id: 'item11', name: "Maokai's Sapling Foam Ball", engName: "Maokai's Sapling Foam Ball", stock: 200, defaultDailyLimit: 30, image: './item11.png' },
-      { id: 'item12', name: '아케인 시즌 2 포스터', engName: 'Arcane Season 2 Poster', stock: 200, defaultDailyLimit: 30, image: './item12.png' }
+      { id: 'item01', name: '10주년 기념 LP 음반', engName: '10th Anniversary LP Record', stock: 10, defaultDailyLimit: 5, image: './item01.png' },
+      { id: 'item02', name: '2025 First Stand 배지', engName: '2025 First Stand Badge', stock: 30, defaultDailyLimit: 15, image: './item02.png' },
+      { id: 'item03', name: '아케인 XL 마우스패드', engName: 'Arcane XL Mousepad', stock: 30, defaultDailyLimit: 15, image: './item03.png' },
+      { id: 'item04', name: '23 Worlds 153 ID 아리와 모나미 세트 ', engName: 'Worlds 2023 Premium Pen Monami Figure Set', stock: 30, defaultDailyLimit: 15, image: './item04.png' },
+      { id: 'item05', name: '23 Worlds 스위스 현장 반팔티 - M', engName: '2023 Worlds Swiss Venue T-Shirt - M', stock: 50, defaultDailyLimit: 25, image: './item05.png' },
+      { id: 'item06', name: '23 Worlds 준결승 반팔티 - M', engName: '2023 Worlds Semifinals T-Shirt - M', stock: 50, defaultDailyLimit: 25, image: './item06.png' },
+      { id: 'item07', name: '와드 폼볼', engName: 'Ward Squeeze', stock: 100, defaultDailyLimit: 50, image: './item07.png' },
+      { id: 'item08', name: "뽀삐 망치 폼볼", engName: "Poppy's Hammer Squeeze", stock: 100, defaultDailyLimit: 50, image: './item08.png' },
+      { id: 'item09', name: "쓰레쉬 랜턴 폼볼", engName: "Thresh's Lantern Squeeze", stock: 100, defaultDailyLimit: 50, image: './item09.png' },
+      { id: 'item10', name: '그라가스 술통 폼볼', engName: 'Gragas Barrel Squeeze', stock: 100, defaultDailyLimit: 50, image: './item10.png' },
+      { id: 'item11', name: "마오카이 묘목 폼볼", engName: "Maokai's Sapling Squeeze", stock: 200, defaultDailyLimit: 100, image: './item11.png' },
+      { id: 'item12', name: '아케인 시즌2 포스터', engName: 'Arcane Season 2 Poster', stock: 200, defaultDailyLimit: 100, image: './item12.png' }
     ];
 
     let boardData = [];
     let dailyLimits = {};
     let drawLogs = [];
+    let isSoldOut = false;
 
     function getTodayKey() {
       const now = new Date();
@@ -807,6 +895,12 @@
         renderLogs();
         renderDailySummary();
       });
+
+      soldOutRef.on('value', snapshot => {
+        const data = snapshot.val() || {};
+        isSoldOut = Boolean(data.active);
+        updateSoldOutScreen();
+      });
     }
 
     function getTodayUsedTotal() {
@@ -876,6 +970,11 @@
     }
 
     async function openCell(index) {
+      if (isSoldOut) {
+        alert('오늘 준비된 이벤트 수량이 모두 소진되었습니다.');
+        return;
+      }
+
       if (!boardData[index] || boardData[index].opened) return;
 
       if (getTodayUsedTotal() >= totalCount) {
@@ -952,6 +1051,53 @@
         alert('비밀번호가 올바르지 않습니다.');
       }
     }
+
+
+    function updateSoldOutScreen() {
+      if (!soldOutPopup) return;
+
+      soldOutPopup.classList.toggle('show', isSoldOut);
+      document.body.classList.toggle('sold-out', isSoldOut);
+
+      if (isSoldOut) {
+        resultPopup.classList.remove('show');
+        notice.textContent = '오늘 준비된 이벤트 수량이 모두 소진되었습니다.';
+      } else if (document.body.classList.contains('admin')) {
+        notice.textContent = '관리자 모드입니다. 모든 기기에서 공유되는 Firebase 사용 현황을 확인할 수 있습니다.';
+      } else {
+        notice.textContent = 'Firebase로 모든 기기에서 수량이 연동됩니다.';
+      }
+    }
+
+    async function activateSoldOut() {
+      if (!document.body.classList.contains('admin')) return;
+      if (!confirm('오늘 품절 상태로 전환할까요? 모든 기기에서 이벤트 화면이 중단됩니다.')) return;
+
+      await soldOutRef.set({
+        active: true,
+        updatedAt: new Date().toISOString(),
+        updatedAtText: getNowText()
+      });
+    }
+
+    async function unlockSoldOut() {
+      const password = soldOutPassword.value;
+
+      if (password !== ADMIN_PASSWORD) {
+        alert('비밀번호가 올바르지 않습니다.');
+        return;
+      }
+
+      await soldOutRef.set({
+        active: false,
+        releasedAt: new Date().toISOString(),
+        releasedAtText: getNowText()
+      });
+
+      soldOutPassword.value = '';
+      alert('오늘 품절 상태가 해제되었습니다.');
+    }
+
 
     function renderDailySetting() {
       if (!dailySettingGrid) return;
@@ -1111,6 +1257,12 @@
       a.download = `lucky-draw-log-${getTodayKey()}.csv`;
       a.click();
       URL.revokeObjectURL(url);
+    }
+
+    if (soldOutPassword) {
+      soldOutPassword.addEventListener('keydown', event => {
+        if (event.key === 'Enter') unlockSoldOut();
+      });
     }
 
     initFirebaseDataIfEmpty()

@@ -168,22 +168,22 @@
     }
 
     /*
-      500개 알을 한 페이지에 모두 표시.
+      150개 알을 한 페이지에 모두 표시.
       화면 너비에 따라 자동으로 줄바꿈됩니다.
-      PC: 약 25칸 내외
-      태블릿: 약 18~22칸 내외
-      모바일: 약 10~14칸 내외
+      PC: 약 16~20칸 내외
+      태블릿: 약 12~16칸 내외
+      모바일: 약 7~10칸 내외
     */
     .draw-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(42px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(55px, 1fr));
       gap: 6px;
     }
 
     .cell {
       position: relative;
       aspect-ratio: 1 / 1;
-      min-height: 42px;
+      min-height: 55px;
       border: 0;
       border-radius: 9px;
       background: linear-gradient(180deg, #c91a20, #8f1116);
@@ -422,12 +422,12 @@
 
     @media (min-width: 1000px) {
       .draw-grid {
-        grid-template-columns: repeat(auto-fit, minmax(38px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(49px, 1fr));
         gap: 5px;
       }
 
       .cell {
-        min-height: 38px;
+        min-height: 49px;
       }
     }
 
@@ -441,12 +441,12 @@
       }
 
       .draw-grid {
-        grid-template-columns: repeat(auto-fit, minmax(46px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
         gap: 6px;
       }
 
       .cell {
-        min-height: 46px;
+        min-height: 60px;
         border-radius: 8px;
       }
 
@@ -474,12 +474,12 @@
       }
 
       .draw-grid {
-        grid-template-columns: repeat(auto-fit, minmax(34px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(44px, 1fr));
         gap: 4px;
       }
 
       .cell {
-        min-height: 34px;
+        min-height: 44px;
         border-radius: 6px;
         font-size: 10px;
       }
@@ -506,7 +506,7 @@
       <h2 class="section-title">ADMIN STATUS</h2>
       <div class="stats-grid">
         <div class="stat-card">당일 총 사용 수량<span id="todayUsedCount">0</span></div>
-        <div class="stat-card">오늘 남은 뽑기 가능 수량<span id="todayRemainingCount">500</span></div>
+        <div class="stat-card">오늘 남은 뽑기 가능 수량<span id="todayRemainingCount">150</span></div>
         <div class="stat-card">전체 누적 사용 수량<span id="totalUsedCount">0</span></div>
         <div class="stat-card">Firebase 상태<span id="firebaseStatus">연결 중</span></div>
       </div>
@@ -515,9 +515,9 @@
     <section class="board-wrap egg-select-area">
       <div class="board-header">
         <strong>LUCKY BOARD</strong>
-        <div>오늘 남은 뽑기 가능 수량 <span class="board-count" id="publicTodayRemaining">500 / 500</span></div>
+        <div>오늘 남은 뽑기 가능 수량 <span class="board-count" id="publicTodayRemaining">150 / 150</span></div>
       </div>
-      <p class="board-guide">1번부터 500번까지의 알 중 원하는 번호를 직접 선택하세요.</p>
+      <p class="board-guide">150개의 알 중 원하는 알을 직접 선택하세요.</p>
       <div class="draw-grid" id="drawGrid"></div>
     </section>
 
@@ -531,8 +531,8 @@
       <div class="daily-setting admin-only">
         <h2 class="section-title">DAILY ITEM LIMIT SETTING</h2>
         <p style="font-weight:900; font-family:Pretendard, sans-serif;">
-          하루 뽑을 수 있는 품목별 수량을 지정하세요. 합계가 500개를 초과하면 저장되지 않습니다.
-          저장 후 [뽑기판 전체 초기화]를 누르면 새 수량으로 500알이 다시 랜덤 배치됩니다.
+          하루 뽑을 수 있는 품목별 수량을 지정하세요. 합계가 150개를 초과하면 저장되지 않습니다.
+          저장 후 [뽑기판 전체 초기화]를 누르면 새 수량으로 150알이 다시 랜덤 배치됩니다.
         </p>
         <div class="setting-grid" id="dailySettingGrid"></div>
         <div style="margin-top:14px;">
@@ -624,21 +624,21 @@
     const firebaseStatus = document.getElementById('firebaseStatus');
 
     const ADMIN_PASSWORD = '1234';
-    const totalCount = 500;
+    const totalCount = 150;
 
     const itemConfig = [
-      { id: 'item01', name: '10주년 기념 LP 음반', engName: '10th Anniversary LP Record', stock: 10, defaultDailyLimit: 5, image: './item01.png' },
-      { id: 'item02', name: '2025 First Stand 배지', engName: '2025 First Stand Badge', stock: 30, defaultDailyLimit: 15, image: './item02.png' },
-      { id: 'item03', name: '아케인 XL 마우스패드', engName: 'Arcane XL Mousepad', stock: 30, defaultDailyLimit: 15, image: './item03.png' },
-      { id: 'item04', name: 'Worlds 2023 Premium Pen Monami Figure Set', engName: 'Worlds 2023 Premium Pen Monami Figure Set', stock: 30, defaultDailyLimit: 15, image: './item04.png' },
-      { id: 'item05', name: '2023 Worlds 스위스 현장 반팔티 - M', engName: '2023 Worlds Swiss Venue T-Shirt - M', stock: 50, defaultDailyLimit: 25, image: './item05.png' },
-      { id: 'item06', name: '2023 Worlds 준결승 반팔티 - M', engName: '2023 Worlds Semifinals T-Shirt - M', stock: 50, defaultDailyLimit: 25, image: './item06.png' },
-      { id: 'item07', name: 'Ward Squeeze', engName: 'Ward Squeeze', stock: 100, defaultDailyLimit: 50, image: './item07.png' },
-      { id: 'item08', name: "Poppy's Hammer Squeeze", engName: "Poppy's Hammer Squeeze", stock: 100, defaultDailyLimit: 50, image: './item08.png' },
-      { id: 'item09', name: "Thresh's lantern Squeeze", engName: "Thresh's Lantern Squeeze", stock: 100, defaultDailyLimit: 50, image: './item09.png' },
-      { id: 'item10', name: '폼볼-그라가스술통', engName: 'Gragas Barrel Foam Ball', stock: 100, defaultDailyLimit: 50, image: './item10.png' },
-      { id: 'item11', name: "Maokai's Sapling Foam Ball", engName: "Maokai's Sapling Foam Ball", stock: 200, defaultDailyLimit: 100, image: './item11.png' },
-      { id: 'item12', name: '아케인 시즌 2 포스터', engName: 'Arcane Season 2 Poster', stock: 200, defaultDailyLimit: 100, image: './item12.png' }
+      { id: 'item01', name: '10주년 기념 LP 음반', engName: '10th Anniversary LP Record', stock: 10, defaultDailyLimit: 2, image: './item01.png' },
+      { id: 'item02', name: '2025 First Stand 배지', engName: '2025 First Stand Badge', stock: 30, defaultDailyLimit: 5, image: './item02.png' },
+      { id: 'item03', name: '아케인 XL 마우스패드', engName: 'Arcane XL Mousepad', stock: 30, defaultDailyLimit: 5, image: './item03.png' },
+      { id: 'item04', name: 'Worlds 2023 Premium Pen Monami Figure Set', engName: 'Worlds 2023 Premium Pen Monami Figure Set', stock: 30, defaultDailyLimit: 4, image: './item04.png' },
+      { id: 'item05', name: '2023 Worlds 스위스 현장 반팔티 - M', engName: '2023 Worlds Swiss Venue T-Shirt - M', stock: 50, defaultDailyLimit: 7, image: './item05.png' },
+      { id: 'item06', name: '2023 Worlds 준결승 반팔티 - M', engName: '2023 Worlds Semifinals T-Shirt - M', stock: 50, defaultDailyLimit: 7, image: './item06.png' },
+      { id: 'item07', name: 'Ward Squeeze', engName: 'Ward Squeeze', stock: 100, defaultDailyLimit: 15, image: './item07.png' },
+      { id: 'item08', name: "Poppy's Hammer Squeeze", engName: "Poppy's Hammer Squeeze", stock: 100, defaultDailyLimit: 15, image: './item08.png' },
+      { id: 'item09', name: "Thresh's lantern Squeeze", engName: "Thresh's Lantern Squeeze", stock: 100, defaultDailyLimit: 15, image: './item09.png' },
+      { id: 'item10', name: '폼볼-그라가스술통', engName: 'Gragas Barrel Foam Ball', stock: 100, defaultDailyLimit: 15, image: './item10.png' },
+      { id: 'item11', name: "Maokai's Sapling Foam Ball", engName: "Maokai's Sapling Foam Ball", stock: 200, defaultDailyLimit: 30, image: './item11.png' },
+      { id: 'item12', name: '아케인 시즌 2 포스터', engName: 'Arcane Season 2 Poster', stock: 200, defaultDailyLimit: 30, image: './item12.png' }
     ];
 
     let boardData = [];
@@ -671,6 +671,16 @@
       return limits;
     }
 
+    function getDailyLimitSum(limits) {
+      return itemConfig.reduce((sum, item) => sum + Number((limits || {})[item.id] || 0), 0);
+    }
+
+    function getBoardLengthFromSnapshotValue(data) {
+      if (Array.isArray(data)) return data.length;
+      if (data && typeof data === 'object') return Object.values(data).length;
+      return 0;
+    }
+
     function createNewBoardData() {
       const pool = [];
       const today = getTodayKey();
@@ -690,7 +700,7 @@
       });
 
       if (pool.length > totalCount) {
-        alert(`품목별 일일 수량 합계가 500개를 초과했습니다. 현재 합계: ${pool.length}개`);
+        alert(`품목별 일일 수량 합계가 150개를 초과했습니다. 현재 합계: ${pool.length}개`);
         return null;
       }
 
@@ -730,10 +740,16 @@
         await limitsRef.set(dailyLimits);
       } else {
         dailyLimits = limitsSnap.val();
+
+        if (getDailyLimitSum(dailyLimits) > totalCount) {
+          dailyLimits = getDefaultDailyLimits();
+          await limitsRef.set(dailyLimits);
+        }
       }
 
       const boardSnap = await boardRef.once('value');
-      if (!boardSnap.exists()) {
+      const currentBoardLength = getBoardLengthFromSnapshotValue(boardSnap.val());
+      if (!boardSnap.exists() || currentBoardLength !== totalCount) {
         const newBoard = createNewBoardData();
         if (newBoard) {
           await boardRef.set(newBoard);
@@ -835,7 +851,8 @@
 
         if (data.opened) cell.classList.add('opened');
 
-        cell.innerHTML = `<span>${data.number || index + 1}</span>`;
+        cell.setAttribute('aria-label', `${data.number || index + 1}번 알`);
+        cell.innerHTML = '<span></span>';
         cell.addEventListener('click', () => openCell(index));
         drawGrid.appendChild(cell);
       });
@@ -856,7 +873,7 @@
       if (!boardData[index] || boardData[index].opened) return;
 
       if (getTodayUsedTotal() >= totalCount) {
-        alert('오늘 뽑기 가능 수량 500개를 모두 사용했습니다.');
+        alert('오늘 뽑기 가능 수량 150개를 모두 사용했습니다.');
         return;
       }
 
@@ -963,7 +980,7 @@
       }
 
       if (sum > totalCount) {
-        alert(`일일 수량 합계가 500개를 초과했습니다. 현재 합계: ${sum}개`);
+        alert(`일일 수량 합계가 150개를 초과했습니다. 현재 합계: ${sum}개`);
         return;
       }
 

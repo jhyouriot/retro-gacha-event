@@ -313,6 +313,27 @@
       font-family: Pretendard, sans-serif;
     }
 
+    .daily-summary-box {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 3px solid var(--red);
+      font-family: Pretendard, sans-serif;
+    }
+
+    .daily-summary-title {
+      margin: 0 0 10px;
+      font-size: 18px;
+      font-weight: 900;
+      color: #111;
+    }
+
+    .daily-summary-note {
+      margin: 0 0 10px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #666;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
@@ -357,23 +378,14 @@
     }
 
     .result-card {
-      width: min(88vw, 460px);
-      padding: 26px;
+      width: min(90vw, 700px);
+      padding: 42px 36px;
       border: 5px solid #fff;
       background: #fff;
       color: #111;
       text-align: center;
       box-shadow: 14px 14px 0 var(--red);
       animation: prizePop .25s ease-out;
-    }
-
-    .result-card img {
-      width: 100%;
-      height: 250px;
-      object-fit: contain;
-      background: #f1f1f1;
-      border: 2px solid #111;
-      margin-bottom: 14px;
     }
 
     .result-card .label {
@@ -387,8 +399,18 @@
 
     .result-card h2 {
       margin: 0;
-      font-size: 28px;
-      line-height: 1.25;
+      font-size: clamp(36px, 6vw, 58px);
+      line-height: 1.15;
+      font-weight: 900;
+      word-break: keep-all;
+    }
+
+    .result-card .eng-name {
+      margin-top: 14px;
+      font-size: clamp(22px, 3.4vw, 34px);
+      font-weight: 900;
+      line-height: 1.18;
+      color: #555;
       word-break: keep-all;
     }
 
@@ -533,6 +555,24 @@
             <tbody id="logTableBody"></tbody>
           </table>
         </div>
+
+        <div class="daily-summary-box">
+          <h3 class="daily-summary-title">사용일자별 참여 집계</h3>
+          <p class="daily-summary-note">Firebase 사용 기록 기준으로 날짜별 총 참여 횟수를 집계합니다.</p>
+          <div class="log-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>사용일자</th>
+                  <th>총 참여 수</th>
+                  <th>당첨 수</th>
+                  <th>꽝 수</th>
+                </tr>
+              </thead>
+              <tbody id="dailySummaryTableBody"></tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -542,8 +582,8 @@
   <div class="result-popup" id="resultPopup">
     <div class="result-card">
       <span class="label">CONGRATULATIONS</span>
-      <img id="resultImage" src="" alt="당첨 아이템 이미지">
       <h2 id="resultName"></h2>
+      <div class="eng-name" id="resultEngName"></div>
     </div>
   </div>
 
@@ -572,32 +612,33 @@
     const itemList = document.getElementById('itemList');
     const notice = document.getElementById('notice');
     const resultPopup = document.getElementById('resultPopup');
-    const resultImage = document.getElementById('resultImage');
     const resultName = document.getElementById('resultName');
+    const resultEngName = document.getElementById('resultEngName');
     const todayUsedCount = document.getElementById('todayUsedCount');
     const todayRemainingCount = document.getElementById('todayRemainingCount');
     const totalUsedCount = document.getElementById('totalUsedCount');
     const publicTodayRemaining = document.getElementById('publicTodayRemaining');
     const dailySettingGrid = document.getElementById('dailySettingGrid');
     const logTableBody = document.getElementById('logTableBody');
+    const dailySummaryTableBody = document.getElementById('dailySummaryTableBody');
     const firebaseStatus = document.getElementById('firebaseStatus');
 
     const ADMIN_PASSWORD = '1234';
     const totalCount = 500;
 
     const itemConfig = [
-      { id: 'item01', name: '10주년 기념 LP 음반', stock: 10, defaultDailyLimit: 5, image: './item01.png' },
-      { id: 'item02', name: '2025 First Stand 배지', stock: 30, defaultDailyLimit: 15, image: './item02.png' },
-      { id: 'item03', name: '아케인 XL 마우스패드', stock: 30, defaultDailyLimit: 15, image: './item03.png' },
-      { id: 'item04', name: 'Worlds 2023 Premium Pen Monami Figure Set', stock: 30, defaultDailyLimit: 15, image: './item04.png' },
-      { id: 'item05', name: '2023 Worlds 스위스 현장 반팔티 - M', stock: 50, defaultDailyLimit: 25, image: './item05.png' },
-      { id: 'item06', name: '2023 Worlds 준결승 반팔티 - M', stock: 50, defaultDailyLimit: 25, image: './item06.png' },
-      { id: 'item07', name: 'Ward Squeeze', stock: 100, defaultDailyLimit: 50, image: './item07.png' },
-      { id: 'item08', name: "Poppy's Hammer Squeeze", stock: 100, defaultDailyLimit: 50, image: './item08.png' },
-      { id: 'item09', name: "Thresh's lantern Squeeze", stock: 100, defaultDailyLimit: 50, image: './item09.png' },
-      { id: 'item10', name: '폼볼-그라가스술통', stock: 100, defaultDailyLimit: 50, image: './item10.png' },
-      { id: 'item11', name: "Maokai's Sapling Foam Ball", stock: 200, defaultDailyLimit: 100, image: './item11.png' },
-      { id: 'item12', name: '아케인 시즌 2 포스터', stock: 200, defaultDailyLimit: 100, image: './item12.png' }
+      { id: 'item01', name: '10주년 기념 LP 음반', engName: '10th Anniversary LP Record', stock: 10, defaultDailyLimit: 5, image: './item01.png' },
+      { id: 'item02', name: '2025 First Stand 배지', engName: '2025 First Stand Badge', stock: 30, defaultDailyLimit: 15, image: './item02.png' },
+      { id: 'item03', name: '아케인 XL 마우스패드', engName: 'Arcane XL Mousepad', stock: 30, defaultDailyLimit: 15, image: './item03.png' },
+      { id: 'item04', name: 'Worlds 2023 Premium Pen Monami Figure Set', engName: 'Worlds 2023 Premium Pen Monami Figure Set', stock: 30, defaultDailyLimit: 15, image: './item04.png' },
+      { id: 'item05', name: '2023 Worlds 스위스 현장 반팔티 - M', engName: '2023 Worlds Swiss Venue T-Shirt - M', stock: 50, defaultDailyLimit: 25, image: './item05.png' },
+      { id: 'item06', name: '2023 Worlds 준결승 반팔티 - M', engName: '2023 Worlds Semifinals T-Shirt - M', stock: 50, defaultDailyLimit: 25, image: './item06.png' },
+      { id: 'item07', name: 'Ward Squeeze', engName: 'Ward Squeeze', stock: 100, defaultDailyLimit: 50, image: './item07.png' },
+      { id: 'item08', name: "Poppy's Hammer Squeeze", engName: "Poppy's Hammer Squeeze", stock: 100, defaultDailyLimit: 50, image: './item08.png' },
+      { id: 'item09', name: "Thresh's lantern Squeeze", engName: "Thresh's Lantern Squeeze", stock: 100, defaultDailyLimit: 50, image: './item09.png' },
+      { id: 'item10', name: '폼볼-그라가스술통', engName: 'Gragas Barrel Foam Ball', stock: 100, defaultDailyLimit: 50, image: './item10.png' },
+      { id: 'item11', name: "Maokai's Sapling Foam Ball", engName: "Maokai's Sapling Foam Ball", stock: 200, defaultDailyLimit: 100, image: './item11.png' },
+      { id: 'item12', name: '아케인 시즌 2 포스터', engName: 'Arcane Season 2 Poster', stock: 200, defaultDailyLimit: 100, image: './item12.png' }
     ];
 
     let boardData = [];
@@ -674,6 +715,7 @@
         return {
           id: 'blank',
           name: '아쉽지만 다음 기회에!',
+          engName: 'Better Luck Next Time!',
           image: './blank.png'
         };
       }
@@ -735,12 +777,13 @@
         renderBoard();
       });
 
-      logsRef.limitToLast(300).on('value', snapshot => {
+      logsRef.on('value', snapshot => {
         const logs = snapshot.val() || {};
         drawLogs = Object.values(logs).sort((a, b) => {
           return new Date(b.openedAt) - new Date(a.openedAt);
         });
         renderLogs();
+        renderDailySummary();
       });
     }
 
@@ -862,18 +905,14 @@
     }
 
     function showResultPopup(item) {
-      resultImage.src = item.image;
-      resultImage.onerror = () => {
-        resultImage.src = 'https://placehold.co/400x300/ffffff/d71920?text=LUCKY+DRAW';
-      };
-      resultImage.alt = item.name;
       resultName.textContent = item.name;
+      resultEngName.textContent = item.engName || '';
 
       resultPopup.classList.add('show');
 
       setTimeout(() => {
         resultPopup.classList.remove('show');
-      }, 2200);
+      }, 2600);
     }
 
     function loginAdmin() {
@@ -884,6 +923,7 @@
         renderDailySetting();
         renderBoard();
         renderLogs();
+        renderDailySummary();
         notice.textContent = '관리자 모드입니다. 모든 기기에서 공유되는 Firebase 사용 현황을 확인할 수 있습니다.';
       } else {
         alert('비밀번호가 올바르지 않습니다.');
@@ -953,7 +993,12 @@
 
       logTableBody.innerHTML = '';
 
-      drawLogs.forEach(log => {
+      if (!drawLogs.length) {
+        logTableBody.innerHTML = '<tr><td colspan="4">아직 사용 기록이 없습니다.</td></tr>';
+        return;
+      }
+
+      drawLogs.slice(0, 300).forEach(log => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td>${log.openedAtText || log.openedAt || '-'}</td>
@@ -963,6 +1008,58 @@
         `;
         logTableBody.appendChild(tr);
       });
+    }
+
+    function getLogDate(log) {
+      if (log.openedDate) return log.openedDate;
+      if (log.openedAt) {
+        const date = new Date(log.openedAt);
+        if (!Number.isNaN(date.getTime())) {
+          return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        }
+      }
+      return '날짜 없음';
+    }
+
+    function renderDailySummary() {
+      if (!dailySummaryTableBody) return;
+
+      dailySummaryTableBody.innerHTML = '';
+
+      if (!drawLogs.length) {
+        dailySummaryTableBody.innerHTML = '<tr><td colspan="4">아직 집계할 기록이 없습니다.</td></tr>';
+        return;
+      }
+
+      const summary = {};
+
+      drawLogs.forEach(log => {
+        const dateKey = getLogDate(log);
+        if (!summary[dateKey]) {
+          summary[dateKey] = { total: 0, prize: 0, blank: 0 };
+        }
+
+        summary[dateKey].total += 1;
+
+        if (log.itemId === 'blank') {
+          summary[dateKey].blank += 1;
+        } else {
+          summary[dateKey].prize += 1;
+        }
+      });
+
+      Object.entries(summary)
+        .sort((a, b) => b[0].localeCompare(a[0]))
+        .forEach(([dateKey, count]) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${dateKey}</td>
+            <td>${count.total}</td>
+            <td>${count.prize}</td>
+            <td>${count.blank}</td>
+          `;
+          dailySummaryTableBody.appendChild(tr);
+        });
     }
 
     function exportLogsCSV() {

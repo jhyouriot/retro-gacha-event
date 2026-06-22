@@ -214,18 +214,17 @@
       padding: 0;
     }
 
-    .cell::before {
-      content: "";
-      position: absolute;
-      width: 52%;
-      height: 52%;
-      left: 8%;
-      top: 8%;
-      border-radius: 50%;
-      background: radial-gradient(circle, #fff 0 16%, rgba(255,255,255,.25) 17% 100%);
-      opacity: .9;
-    }
-
+.cell::before {
+  content: "";
+  position: absolute;
+  inset: 18%;
+  background-image: url('./주먹로고.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  opacity: 0.35;
+  pointer-events: none;
+}
     .cell span {
       position: relative;
       z-index: 1;
